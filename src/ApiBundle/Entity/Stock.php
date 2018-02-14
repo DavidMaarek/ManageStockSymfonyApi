@@ -29,11 +29,6 @@ class Stock
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="ApiBundle\Entity\User", cascade={"persist"})
-     */
-    private $user;
-
-    /**
      * @return mixed
      */
     public function getProduct()
