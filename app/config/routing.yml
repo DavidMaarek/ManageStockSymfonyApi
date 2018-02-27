@@ -1,4 +1,11 @@
 api:
-    resource: "@ApiBundle/Controller/"
+    resource: "@ApiBundle/Controller/DefaultController.php"
     type:     annotation
     prefix:   /
+
+products:
+    type:     rest
+    resource: ApiBundle\Controller\ProductController
+files:
+    type:     rest
+    resource: ApiBundle\Controller\FileController

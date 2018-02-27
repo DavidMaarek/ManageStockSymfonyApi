@@ -2,13 +2,17 @@
 
 namespace ApiBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Product
  *
  * @ORM\Table(name="product")
  * @ORM\Entity(repositoryClass="ApiBundle\Repository\ProductRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Product
 {
@@ -18,6 +22,7 @@ class Product
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"product", "stock"})
      */
     private $id;
 
@@ -25,6 +30,8 @@ class Product
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Groups({"product", "stock"})
+     * @Assert\NotBlank()
      */
     private $name;
 
@@ -32,6 +39,8 @@ class Product
      * @var string
      *
      * @ORM\Column(name="reference", type="string", length=255)
+     * @Groups({"product", "stock"})
+     * @Assert\NotBlank()
      */
     private $reference;
 
@@ -39,6 +48,9 @@ class Product
      * @var string
      *
      * @ORM\Column(name="quantity", type="integer", length=255)
+     * @Groups({"product", "stock"})
+     * @Assert\NotBlank()
+     * @Assert\Type("integer")
      */
     private $quantity;
 
@@ -46,13 +58,190 @@ class Product
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=true)
+     * @Groups({"product", "stock"})
      */
     private $description;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="picture1", type="string", length=255, nullable=true)
+     * @Groups({"product", "stock"})
+     * @Assert\Image(mimeTypes = {"image/jpg", "image/jpeg", "image/png"})
+     */
+    private $picture1;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="picture2", type="string", length=255, nullable=true)
+     * @Groups({"product", "stock"})
+     * @Assert\Image(mimeTypes = {"image/jpg", "image/jpeg", "image/png"})
+     */
+    private $picture2;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="picture3", type="string", length=255, nullable=true)
+     * @Groups({"product", "stock"})
+     * @Assert\Image(mimeTypes = {"image/jpg", "image/jpeg", "image/png"})
+     */
+    private $picture3;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="picture4", type="string", length=255, nullable=true)
+     * @Groups({"product", "stock"})
+     * @Assert\Image(mimeTypes = {"image/jpg", "image/jpeg", "image/png"})
+     */
+    private $picture4;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="picture5", type="string", length=255, nullable=true)
+     * @Groups({"product", "stock"})
+     * @Assert\Image(mimeTypes = {"image/jpg", "image/jpeg", "image/png"})
+     */
+    private $picture5;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pdf", type="string", length=255, nullable=true)
+     * @Groups({"product", "stock"})
+     * @Assert\File(mimeTypes = {"application/pdf", "application/x-pdf"})
+     */
+    private $pdf;
+
+    /**
+     * @return string
+     */
+    public function getPicture1()
+    {
+        return $this->picture1;
+    }
+
+    /**
+     * @param string $picture1
+     */
+    public function setPicture1($picture1)
+    {
+        $this->picture1 = $picture1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPicture2()
+    {
+        return $this->picture2;
+    }
+
+    /**
+     * @param string $picture2
+     */
+    public function setPicture2($picture2)
+    {
+        $this->picture2 = $picture2;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPicture3()
+    {
+        return $this->picture3;
+    }
+
+    /**
+     * @param string $picture3
+     */
+    public function setPicture3($picture3)
+    {
+        $this->picture3 = $picture3;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPicture4()
+    {
+        return $this->picture4;
+    }
+
+    /**
+     * @param string $picture4
+     */
+    public function setPicture4($picture4)
+    {
+        $this->picture4 = $picture4;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPicture5()
+    {
+        return $this->picture5;
+    }
+
+    /**
+     * @param string $picture5
+     */
+    public function setPicture5($picture5)
+    {
+        $this->picture5 = $picture5;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPdf()
+    {
+        return $this->pdf;
+    }
+
+    /**
+     * @param string $pdf
+     */
+    public function setPdf($pdf)
+    {
+        $this->pdf = $pdf;
+    }
+
+    /**
+     * @return string
+     */
+    public function getZip()
+    {
+        return $this->zip;
+    }
+
+    /**
+     * @param string $zip
+     */
+    public function setZip($zip)
+    {
+        $this->zip = $zip;
+    }
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="zip", type="string", length=255, nullable=true)
+     * @Groups({"product", "stock"})
+     * Assert\File(mimeTypes = {"application/zip"})
+     */
+    private $zip;
+
+    /**
      * @var \DateTime
      *
-     * @ORM\Column(name="createdAt", type="datetime")
+     * @ORM\Column(name="createdAt", type="datetime", nullable=true)
+     * @Groups({"product", "stock"})
      */
     private $createdAt;
 
@@ -60,57 +249,18 @@ class Product
      * @var \DateTime
      *
      * @ORM\Column(name="updatedAt", type="datetime", nullable=true)
+     * @Groups({"product", "stock"})
+     * @Assert\DateTime()
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\Stock", inversedBy="product")
      * @ORM\JoinColumn(name="stock_id", referencedColumnName="id")
+     * @Groups({"product"})
      */
     private $stock;
-
-    /**
-     * @ORM\OneToMany(targetEntity="ApiBundle\Entity\File", mappedBy="product")
-     */
-    private $file;
-
-    /**
-     * @ORM\OneToMany(targetEntity="ApiBundle\Entity\History", mappedBy="product")
-     */
-    private $history;
-
-    /**
-     * @return mixed
-     */
-    public function getHistory()
-    {
-        return $this->history;
-    }
-
-    /**
-     * @param mixed $history
-     */
-    public function setHistory($history)
-    {
-        $this->history = $history;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFile()
-    {
-        return $this->file;
-    }
-
-    /**
-     * @param mixed $file
-     */
-    public function setFile($file)
-    {
-        $this->file = $file;
-    }
-
+    
     /**
      * @return mixed
      */
@@ -280,6 +430,29 @@ class Product
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        if (!$this->getCreatedAt()) {
+            $this->setCreatedAt(new \DateTime());
+        }
+
+        if (!$this->getUpdatedAt()) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdate()
+    {
+        $this->setUpdatedAt(new \DateTime());
     }
 }
 

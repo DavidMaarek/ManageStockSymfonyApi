@@ -3,6 +3,8 @@
 namespace ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Stock
@@ -18,6 +20,7 @@ class Stock
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"stock", "product"})
      */
     private $id;
 
@@ -25,8 +28,16 @@ class Stock
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Groups({"stock", "product"})
+     * @Assert\NotBlank()
      */
     private $name;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ApiBundle\Entity\Product", mappedBy="stock", cascade={"remove"})
+     * @Groups({"stock"})
+     */
+    private $product;
 
     /**
      * @return mixed
@@ -43,11 +54,6 @@ class Stock
     {
         $this->product = $product;
     }
-
-    /**
-     * @ORM\OneToMany(targetEntity="ApiBundle\Entity\Product", mappedBy="stock")
-     */
-    private $product;
 
     /**
      * Get id
@@ -73,21 +79,6 @@ class Stock
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param mixed $user
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-    }
 
     /**
      * Get name

@@ -3,6 +3,7 @@
 namespace ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * User
@@ -55,48 +56,6 @@ class User
      * @ORM\Column(name="society", type="string", length=255, nullable=true)
      */
     private $society;
-
-    /**
-     * @ORM\OneToMany(targetEntity="ApiBundle\Entity\History", mappedBy="user")
-     */
-    private $history;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="ApiBundle\Entity\Stock", cascade={"persist"})
-     */
-    private $stock;
-
-    /**
-     * @return mixed
-     */
-    public function getStock()
-    {
-        return $this->stock;
-    }
-
-    /**
-     * @param mixed $stock
-     */
-    public function setStock($stock)
-    {
-        $this->stock = $stock;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getHistory()
-    {
-        return $this->history;
-    }
-
-    /**
-     * @param mixed $history
-     */
-    public function setHistory($history)
-    {
-        $this->history = $history;
-    }
 
     /**
      * Get id

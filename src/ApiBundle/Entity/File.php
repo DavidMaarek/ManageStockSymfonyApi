@@ -3,6 +3,8 @@
 namespace ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * File
@@ -18,6 +20,7 @@ class File
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"file", "product"})
      */
     private $id;
 
@@ -25,19 +28,22 @@ class File
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=255)
+     * @Groups({"file", "product"})
      */
     private $type;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="url", type="string", length=255)
+     * @ORM\Column(name="url", type="text")
+     * @Groups({"file", "product"})
      */
     private $url;
 
     /**
      * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\Product", inversedBy="file")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
+     * @Groups({"file"})
      */
     private $product;
 
