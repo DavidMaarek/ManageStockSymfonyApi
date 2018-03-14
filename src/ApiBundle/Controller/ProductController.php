@@ -17,7 +17,7 @@ class ProductController extends Controller
      * @Rest\View(serializerGroups={"product"})
      * @Rest\Get("/products")
     */
-    public function getProductsAction(Request $request)
+    public function getProductsAction()
     {
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('ApiBundle:Product')->findAll();
@@ -26,40 +26,61 @@ class ProductController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return mixed
      * @Rest\View(serializerGroups={"product"})
      * @Rest\Get("/products/{id}")
      */
-    public function getPlaceAction(Request $request)
+    public function getProductAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $place = $em->getRepository('ApiBundle:Product')->find($request->get('id'));
+        $product = $em->getRepository('ApiBundle:Product')->find($request->get('id'));
 
-        if (empty($place)) {
-            return View::create(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
+        if (empty($product)) {
+            return View::create(['message' => 'Product not found'], Response::HTTP_NOT_FOUND);
         }
 
-        return $place;
+        return $product;
     }
 
     /**
+     * @param Request $request
+     * @return mixed
      * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"product"})
      * @Rest\Post("/products")
      */
-    public function postPlacesAction(Request $request)
+    public function postProductAction(Request $request)
     {
-
         $product = new Product();
 
         $form = $this->createForm(ProductType::class, $product);
 
-        $form->submit($request->request->all()); // Validation des données
+        $form->submit($request->request->all(), true);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
+            $picture1 = $this->container->get('app.file_uploader')->upload($product->getPicture1());
+            $product->setPicture1($picture1);
+
+            $picture2 = $this->container->get('app.file_uploader')->upload($product->getPicture2());
+            $product->setPicture2($picture2);
+
+            $picture3 = $this->container->get('app.file_uploader')->upload($product->getPicture3());
+            $product->setPicture3($picture3);
+
+            $picture4 = $this->container->get('app.file_uploader')->upload($product->getPicture4());
+            $product->setPicture4($picture4);
+
+            $picture5 = $this->container->get('app.file_uploader')->upload($product->getPicture5());
+            $product->setPicture5($picture5);
+
             $em->persist($product);
             $em->flush();
+
             return $product;
         } else {
+
             return $form;
         }
     }

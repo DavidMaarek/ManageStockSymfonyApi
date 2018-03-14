@@ -2,7 +2,6 @@
 
 namespace ApiBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -117,6 +116,15 @@ class Product
     private $pdf;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="zip", type="string", length=255, nullable=true)
+     * @Groups({"product", "stock"})
+     * Assert\File(mimeTypes = {"application/zip"})
+     */
+    private $zip;
+
+    /**
      * @return string
      */
     public function getPicture1()
@@ -229,15 +237,6 @@ class Product
     }
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="zip", type="string", length=255, nullable=true)
-     * @Groups({"product", "stock"})
-     * Assert\File(mimeTypes = {"application/zip"})
-     */
-    private $zip;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="createdAt", type="datetime", nullable=true)
@@ -255,7 +254,7 @@ class Product
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\Stock", inversedBy="product")
+     * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\Stock", inversedBy="products")
      * @ORM\JoinColumn(name="stock_id", referencedColumnName="id")
      * @Groups({"product"})
      */

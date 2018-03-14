@@ -12,7 +12,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="stock")
  * @ORM\Entity(repositoryClass="ApiBundle\Repository\StockRepository")
- * @ORM\HasLifecycleCallbacks()
  */
 class Stock
 {
@@ -63,13 +62,12 @@ class Stock
      * @ORM\OneToMany(targetEntity="ApiBundle\Entity\Access", mappedBy="stock", cascade={"persist"}, orphanRemoval=true)
      * @Groups({"stock", "product"})
      * @var Access[]
-     * @Assert\Valid()
      */
     private $toto;
 
     public function __construct()
     {
-        $this->toto = new ArrayCollection();
+        $this->access = new ArrayCollection();
         $this->products = new ArrayCollection();
     }
 
@@ -107,14 +105,10 @@ class Stock
 
     /**
      * @param \DateTime $updatedAt
-     *
-     * @return Stock
      */
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
-
-        return $this;
     }
 
     /**
@@ -236,43 +230,5 @@ class Stock
         $this->access[] = $access;
 
         return $this;
-    }
-
-    /**
-     * Add toto
-     *
-     * @param \ApiBundle\Entity\Access $toto
-     *
-     * @return Stock
-     */
-    public function addToto(\ApiBundle\Entity\Access $toto)
-    {
-        $toto->setStock($this);
-
-        if (!$this->toto->contains($toto)){
-            $this->toto->add($toto);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Remove toto
-     *
-     * @param \ApiBundle\Entity\Access $toto
-     */
-    public function removeToto(\ApiBundle\Entity\Access $toto)
-    {
-        $this->toto->removeElement($toto);
-    }
-
-    /**
-     * Get toto
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getToto()
-    {
-        return $this->toto;
     }
 }

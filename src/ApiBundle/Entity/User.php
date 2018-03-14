@@ -19,6 +19,7 @@ class User
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"user", "access", "stock"})
      */
     private $id;
 
@@ -26,6 +27,7 @@ class User
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Groups({"user", "access"})
      */
     private $name;
 
@@ -33,6 +35,7 @@ class User
      * @var string
      *
      * @ORM\Column(name="firstname", type="string", length=255)
+     * @Groups({"user", "access"})
      */
     private $firstname;
 
@@ -40,6 +43,7 @@ class User
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
+     * @Groups({"user", "access"})
      */
     private $email;
 
@@ -47,6 +51,7 @@ class User
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255)
+     * @Groups({"user", "access"})
      */
     private $password;
 
@@ -54,8 +59,31 @@ class User
      * @var string
      *
      * @ORM\Column(name="society", type="string", length=255, nullable=true)
+     * @Groups({"user", "access"})
      */
     private $society;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ApiBundle\Entity\Access", mappedBy="user", cascade={"remove"})
+     * @Groups({"user"})
+     */
+    private $access;
+
+    /**
+     * @return mixed
+     */
+    public function getAccess()
+    {
+        return $this->access;
+    }
+
+    /**
+     * @param mixed $access
+     */
+    public function setAccess($access)
+    {
+        $this->access = $access;
+    }
 
     /**
      * Get id
