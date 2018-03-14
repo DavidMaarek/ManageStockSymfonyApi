@@ -12,3 +12,6 @@ stocks:
 users:
     type:     rest
     resource: ApiBundle\Controller\UserController
+auth-tokens:
+    type:     rest
+    resource: ApiBundle\Controller\AuthTokenController
