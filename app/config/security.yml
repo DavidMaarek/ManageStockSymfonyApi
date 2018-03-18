@@ -6,6 +6,8 @@ security:
     providers:
         in_memory:
             memory: ~
+        auth_token_user_provider:
+            id: auth_token_user_provider
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -14,6 +16,11 @@ security:
             security: false
 
         main:
+            pattern: ^/
+            stateless: true
+            simple_preauth:
+                authenticator: auth_token_authenticator
+            provider: auth_token_user_provider
             anonymous: ~
             # activate different ways to authenticate
 

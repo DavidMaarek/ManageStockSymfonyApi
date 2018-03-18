@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\View\View;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class StockController extends Controller{
     /**
@@ -35,7 +35,7 @@ class StockController extends Controller{
         $stock = $em->getRepository('ApiBundle:Stock')->find($request->get('id'));
 
         if (empty($stock)) {
-            return View::create(['message' => 'Stock not found'], Response::HTTP_NOT_FOUND);
+            throw new NotFoundHttpException('Stock not found');
         }
 
         return $stock;

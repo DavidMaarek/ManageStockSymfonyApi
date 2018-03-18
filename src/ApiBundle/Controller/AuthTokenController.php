@@ -8,7 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\View\View;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AuthTokenController extends Controller
 {
@@ -31,8 +32,7 @@ class AuthTokenController extends Controller
 
         $em = $this->get('doctrine.orm.entity_manager');
 
-        $user = $em->getRepository('ApiBundle:User')
-            ->findOneByEmail($credentials->getLogin());
+        $user = $em->getRepository('ApiBundle:User')->findOneByEmail($credentials->getLogin());
 
         if (!$user) { // L'utilisateur n'existe pas
             return $this->invalidCredentials();
@@ -58,6 +58,25 @@ class AuthTokenController extends Controller
 
     private function invalidCredentials()
     {
-        return View::create(['message' => 'Invalid credentials'], Response::HTTP_BAD_REQUEST);
+        throw new NotFoundHttpException('Invalid credentials');
+    }
+
+    /**
+     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
+     * @Rest\Delete("/auth-tokens/{id}")
+     */
+    public function removeAuthTokenAction(Request $request)
+    {
+        $em = $this->get('doctrine.orm.entity_manager');
+        $authToken = $em->getRepository('ApiBundle:AuthToken')->find($request->get('id'));
+
+        $connectedUser = $this->get('security.token_storage')->getToken()->getUser();
+
+        if ($authToken && $authToken->getUser()->getId() === $connectedUser->getId()) {
+            $em->remove($authToken);
+            $em->flush();
+        } else {
+            throw new BadRequestHttpException();
+        }
     }
 }

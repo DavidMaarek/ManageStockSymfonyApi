@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\View\View;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProductController extends Controller
 {
@@ -37,7 +37,7 @@ class ProductController extends Controller
         $product = $em->getRepository('ApiBundle:Product')->find($request->get('id'));
 
         if (empty($product)) {
-            return View::create(['message' => 'Product not found'], Response::HTTP_NOT_FOUND);
+            throw new NotFoundHttpException('Product not found');
         }
 
         return $product;

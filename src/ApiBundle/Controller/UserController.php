@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\View\View;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UserController extends Controller
 {
@@ -17,7 +17,7 @@ class UserController extends Controller
      * @Rest\View(serializerGroups={"user"})
      * @Rest\Get("/users")
      */
-    public function getProductsAction()
+    public function getUsersAction()
     {
         $em = $this->getDoctrine()->getManager();
         $users = $em->getRepository('ApiBundle:User')->findAll();
@@ -31,13 +31,13 @@ class UserController extends Controller
      * @Rest\View(serializerGroups={"user"})
      * @Rest\Get("/users/{id}")
      */
-    public function getProductAction(Request $request)
+    public function getUserAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('ApiBundle:User')->find($request->get('id'));
 
         if (empty($user)) {
-            return View::create(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
+            throw new NotFoundHttpException('User not found');
         }
 
         return $user;
@@ -49,7 +49,7 @@ class UserController extends Controller
      * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"user"})
      * @Rest\Post("/users")
      */
-    public function postProductAction(Request $request)
+    public function postUserAction(Request $request)
     {
         $user = new User();
 
