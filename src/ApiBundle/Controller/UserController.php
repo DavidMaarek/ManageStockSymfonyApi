@@ -73,4 +73,51 @@ class UserController extends Controller
             return $form;
         }
     }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     * @Rest\View()
+     * @Rest\Put("/users/{id}")
+     */
+    public function updateUserAction(Request $request)
+    {
+        return $this->updateUser($request, true);
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     * @Rest\View()
+     * @Rest\Patch("/users/{id}")
+     */
+    public function patchUserAction(Request $request)
+    {
+        return $this->updateUser($request, false);
+    }
+
+    private function updateUser(Request $request, $clearMissing)
+    {
+        $user = $this->get('doctrine.orm.entity_manager')
+            ->getRepository('ApiBundle:User')
+            ->find($request->get('id'));
+
+        if (empty($user)) {
+            throw new NotFoundHttpException('User not found');
+        }
+
+        $form = $this->createForm(UserType::class, $user);
+
+        $form->submit($request->request->all(), $clearMissing);
+
+        if ($form->isValid()) {
+            $em = $this->get('doctrine.orm.entity_manager');
+
+            $em->persist($user);
+            $em->flush();
+            return $user;
+        } else {
+            return $form;
+        }
+    }
 }
