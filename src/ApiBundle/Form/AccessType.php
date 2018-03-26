@@ -28,7 +28,7 @@ class AccessType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'ApiBundle\Entity\Access',
+            'data_class' => 'ApiBundle\Entity\StockAccess',
             'csrf_protection' => false
         ));
     }

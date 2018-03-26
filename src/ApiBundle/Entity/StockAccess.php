@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="access")
  * @ORM\Entity(repositoryClass="ApiBundle\Repository\AccessRepository")
  */
-class Access
+class StockAccess
 {
     /**
      * @var int
@@ -103,7 +103,7 @@ class Access
      *
      * @param integer $role
      *
-     * @return access
+     * @return StockAccess
      */
     public function setRole($role)
     {

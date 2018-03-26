@@ -53,32 +53,24 @@ class Stock
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="ApiBundle\Entity\Product", mappedBy="stock", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="ApiBundle\Entity\Product", mappedBy="stock", orphanRemoval=true)
      * @Groups({"stock", "access"})
      * @var Products[]
      */
     private $products;
 
     /**
-     * @ORM\OneToMany(targetEntity="ApiBundle\Entity\Access", mappedBy="stock", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="StockAccess", mappedBy="stock", cascade={"persist"}, orphanRemoval=true)
      * @Groups({"stock", "product"})
-     * @var Access[]
+     * @var StockAccesses[]
      * @Assert\Valid()
      */
-    private $toto;
+    private $stockAccesses;
 
     public function __construct()
     {
-        $this->toto = new ArrayCollection();
+        $this->stockAccesses = new ArrayCollection();
         $this->products = new ArrayCollection();
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAccess()
-    {
-        return $this->access;
     }
 
     /**
@@ -193,11 +185,11 @@ class Stock
     /**
      * Add product
      *
-     * @param \ApiBundle\Entity\Product $product
+     * @param Product $product
      *
      * @return Stock
      */
-    public function addProduct(\ApiBundle\Entity\Product $product)
+    public function addProduct(Product $product)
     {
         $this->products[] = $product;
 
@@ -207,72 +199,49 @@ class Stock
     /**
      * Remove product
      *
-     * @param \ApiBundle\Entity\Product $product
+     * @param Product $product
      */
-    public function removeProduct(\ApiBundle\Entity\Product $product)
+    public function removeProduct(Product $product)
     {
         $this->products->removeElement($product);
     }
 
-    /**
-     * Remove access
-     *
-     * @param \ApiBundle\Entity\Access $access
-     */
-    public function removeAccess(\ApiBundle\Entity\Access $access)
-    {
-        $this->access->removeElement($access);
-    }
 
     /**
-     * Add access
+     * Add StockAccess
      *
-     * @param \ApiBundle\Entity\Access $access
+     * @param StockAccess $stockAccess
      *
      * @return Stock
      */
-    public function addAccess(\ApiBundle\Entity\Access $access)
+    public function addStockAccess(StockAccess $stockAccess)
     {
-        $this->access[] = $access;
+        $stockAccess->setStock($this);
 
-        return $this;
-    }
-
-    /**
-     * Add toto
-     *
-     * @param \ApiBundle\Entity\Access $toto
-     *
-     * @return Stock
-     */
-    public function addToto(\ApiBundle\Entity\Access $toto)
-    {
-        $toto->setStock($this);
-
-        if (!$this->toto->contains($toto)){
-            $this->toto->add($toto);
+        if (!$this->stockAccesses->contains($stockAccess)){
+            $this->stockAccesses->add($stockAccess);
         }
 
         return $this;
     }
 
     /**
-     * Remove toto
+     * Remove StockAccesses
      *
-     * @param \ApiBundle\Entity\Access $toto
+     * @param StockAccess $stockAccess
      */
-    public function removeToto(\ApiBundle\Entity\Access $toto)
+    public function removeStockAccess(StockAccess $stockAccess)
     {
-        $this->toto->removeElement($toto);
+        $this->stockAccesses->removeElement($stockAccess);
     }
 
     /**
-     * Get toto
+     * Get StockAccesses
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getToto()
+    public function getStockAccesses()
     {
-        return $this->toto;
+        return $this->stockAccesses;
     }
 }

@@ -67,4 +67,70 @@ class StockController extends Controller{
             return $form;
         }
     }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
+     * @Rest\Delete("/stocks/{id}")
+     */
+    public function removeStockAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $stock = $em->getRepository('ApiBundle:Stock')->find($request->get('id'));
+
+        if ($stock) {
+            $em->remove($stock);
+            $em->flush();
+        }
+    }
+
+
+    /**
+     * @param Request $request
+     * @return mixed
+     * @Rest\View(serializerGroups={"stock"})
+     * @Rest\Put("/stocks/{id}")
+     */
+    public function updateStockAction(Request $request)
+    {
+        return $this->updateStock($request, true);
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     * @Rest\View(serializerGroups={"stock"})
+     * @Rest\Patch("/stocks/{id}")
+     */
+    public function patchStockAction(Request $request)
+    {
+        return $this->updateStock($request, false);
+    }
+
+    private function updateStock(Request $request, $clearMissing)
+    {
+        $stock = $this->get('doctrine.orm.entity_manager')
+            ->getRepository('ApiBundle:Stock')
+            ->find($request->get('id'));
+
+        if (empty($stock)) {
+            throw new NotFoundHttpException('Stock not found');
+        }
+
+        $form = $this->createForm(StockType::class, $stock);
+
+        $form->submit($request->request->all(), $clearMissing);
+
+        if ($form->isValid()) {
+            $em = $this->get('doctrine.orm.entity_manager');
+
+            $em->persist($stock);
+            $em->flush();
+            return $stock;
+        } else {
+            return $form;
+        }
+    }
+
 }

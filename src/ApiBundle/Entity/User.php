@@ -75,14 +75,6 @@ class User implements UserInterface
     }
 
     /**
-     * @param mixed $plainPassword
-     */
-    public function setPlainPassword($plainPassword)
-    {
-        $this->plainPassword = $plainPassword;
-    }
-
-    /**
      * @var string
      *
      * @ORM\Column(name="society", type="string", length=255, nullable=true)
@@ -91,10 +83,19 @@ class User implements UserInterface
     private $society;
 
     /**
-     * @ORM\OneToMany(targetEntity="ApiBundle\Entity\Access", mappedBy="user", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="StockAccess", mappedBy="user", cascade={"remove"})
      * @Groups({"user"})
      */
     private $access;
+
+
+    /**
+     * @param mixed $plainPassword
+     */
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
+    }
 
     /**
      * @return mixed
@@ -273,11 +274,11 @@ class User implements UserInterface
     /**
      * Add access
      *
-     * @param \ApiBundle\Entity\Access $access
+     * @param \ApiBundle\Entity\StockAccess $access
      *
      * @return User
      */
-    public function addAccess(\ApiBundle\Entity\Access $access)
+    public function addAccess(\ApiBundle\Entity\StockAccess $access)
     {
         $this->access[] = $access;
 
@@ -287,9 +288,9 @@ class User implements UserInterface
     /**
      * Remove access
      *
-     * @param \ApiBundle\Entity\Access $access
+     * @param \ApiBundle\Entity\StockAccess $access
      */
-    public function removeAccess(\ApiBundle\Entity\Access $access)
+    public function removeAccess(\ApiBundle\Entity\StockAccess $access)
     {
         $this->access->removeElement($access);
     }

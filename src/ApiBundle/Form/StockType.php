@@ -20,7 +20,7 @@ class StockType extends AbstractType
             ->add('name', TextType::class)
             ->add('createdAt', DateTimeType::class)
             ->add('updatedAt', DateTimeType::class)
-            ->add('toto', CollectionType::class, [
+            ->add('stockAccesses', CollectionType::class, [
                 'entry_type' => AccessType::class,
                 'allow_add' => true,
                 'error_bubbling' => false,
