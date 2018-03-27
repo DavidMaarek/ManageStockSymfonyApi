@@ -62,6 +62,8 @@ class AuthTokenController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return mixed
      * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
      * @Rest\Delete("/auth-tokens/{id}")
      */
