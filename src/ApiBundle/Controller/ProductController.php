@@ -4,7 +4,6 @@ namespace ApiBundle\Controller;
 
 use ApiBundle\Entity\Product;
 use ApiBundle\Form\ProductType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -51,11 +50,9 @@ class ProductController extends MainController
      */
     public function postProductAction(Request $request)
     {
-
         $stockId = $request->get('stock');
 
-
-        if(isSuperAdmin($request, $stockId)){
+        if($this->isSuperAdmin($request, $stockId)){
             $product = new Product();
 
             $form = $this->createForm(ProductType::class, $product);

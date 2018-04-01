@@ -4,22 +4,30 @@ namespace ApiBundle\Controller;
 
 use ApiBundle\Entity\Stock;
 use ApiBundle\Form\StockType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class StockController extends Controller{
+class StockController extends MainController
+{
     /**
+     * @param Request $request
+     * @return mixed
      * @Rest\View(serializerGroups={"stock"})
      * @Rest\Get("/stocks")
     */
-    public function getStocksAction()
+    public function getStocksAction(Request $request)
     {
+        $stocksId = $this->giveMeUsersStocks($request);
+
+        if (empty($stocksId)) {
+            throw new NotFoundHttpException('Vous n\'avez aucun stock');
+        }
+
         $em = $this->getDoctrine()->getManager();
-        $stocks = $em->getRepository('ApiBundle:Stock')->findAll();
+
+        $stocks = $em->getRepository('ApiBundle:Stock')->findById($stocksId);
 
         return $stocks;
     }
