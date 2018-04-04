@@ -52,9 +52,9 @@ class StockController extends MainController
             }
 
             return $stock;
+        } else {
+            throw new BadCredentialsException('Vous n\'avez les droits');
         }
-
-        throw new BadCredentialsException('Vous n\'avez les droits');
     }
 
     /**
@@ -79,7 +79,6 @@ class StockController extends MainController
 
             return $stock;
         } else {
-
             return $form;
         }
     }
@@ -92,7 +91,6 @@ class StockController extends MainController
      */
     public function removeStockAction(Request $request)
     {
-
         $stockId = $request->get('id');
 
         if($this->isSuperAdmin($request, $stockId)){
@@ -103,9 +101,9 @@ class StockController extends MainController
                 $em->remove($stock);
                 $em->flush();
             }
+        } else {
+            throw new BadCredentialsException('Vous n\'avez les droits sur ce stock pour le supprimer');
         }
-
-        throw new BadCredentialsException('Vous n\'avez les droits sur ce stock pour le supprimer');
     }
 
 
@@ -157,9 +155,9 @@ class StockController extends MainController
             } else {
                 return $form;
             }
+        } else {
+            throw new BadCredentialsException('Vous n\'avez les droits sur ce stock pour le modifier');
         }
-
-        throw new BadCredentialsException('Vous n\'avez les droits sur ce stock pour le modifier');
     }
 
 }

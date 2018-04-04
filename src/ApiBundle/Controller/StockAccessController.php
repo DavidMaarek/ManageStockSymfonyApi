@@ -41,9 +41,9 @@ class StockAccessController extends MainController
             $stockAccesses = $em->getRepository('ApiBundle:StockAccess')->findBy(['stock' => $stockId]);
 
             return $stockAccesses;
+        } else {
+            throw new BadCredentialsException('Vous n\'avez les droits pour afficher les access de ce stock');
         }
-
-        throw new BadCredentialsException('Vous n\'avez les droits pour afficher les access de ce stock');
     }
 
     /**
@@ -74,9 +74,9 @@ class StockAccessController extends MainController
 
                 return $form;
             }
+        } else {
+            throw new BadCredentialsException('Vous n\'avez les droits pour ajouter un utilisateur au stock');
         }
-
-        throw new BadCredentialsException('Vous n\'avez les droits pour ajouter un utilisateur au stock');
     }
 
     /**
@@ -104,8 +104,8 @@ class StockAccessController extends MainController
                 $em->remove($stockAccess);
                 $em->flush();
             }
+        } else {
+            throw new BadCredentialsException('Vous n\'avez les droits pour supprimer un utilisateur de ce stock');
         }
-
-        throw new BadCredentialsException('Vous n\'avez les droits pour supprimer un utilisateur de ce stock');
     }
 }

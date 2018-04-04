@@ -43,9 +43,9 @@ class UserController extends MainController
             }
 
             return $user;
+        } else {
+            throw new BadCredentialsException('Vous n\'avez les droits pour afficher cet utilisateur');
         }
-
-        throw new BadCredentialsException('Vous n\'avez les droits pour afficher cet utilisateur');
     }
 
     /**
@@ -125,8 +125,8 @@ class UserController extends MainController
             } else {
                 return $form;
             }
+        } else {
+            throw new BadCredentialsException('Vous n\'avez les droits pour modifier cet utilisateur');
         }
-
-        throw new BadCredentialsException('Vous n\'avez les droits pour modifier cet utilisateur');
     }
 }

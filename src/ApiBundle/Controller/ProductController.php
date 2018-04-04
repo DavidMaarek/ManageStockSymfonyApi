@@ -45,9 +45,9 @@ class ProductController extends MainController
             }
 
             return $product;
+        } else {
+            throw new BadCredentialsException('Vous n\'avez les droits pour acceder à ce produit');
         }
-
-        throw new BadCredentialsException('Vous n\'avez les droits pour acceder à ce produit');
     }
 
     /**
@@ -93,9 +93,9 @@ class ProductController extends MainController
 
                 return $form;
             }
+        } else {
+            throw new BadCredentialsException('Vous n\'avez les droits pour ajouter un produit à ce stock');
         }
-
-        throw new BadCredentialsException('Vous n\'avez les droits pour ajouter un produit à ce stock');
     }
 
     /**
@@ -119,9 +119,9 @@ class ProductController extends MainController
                 $em->remove($product);
                 $em->flush();
             }
+        } else {
+            throw new BadCredentialsException('Vous n\'avez les droits pour supprimer un produit de ce stock');
         }
-
-        throw new BadCredentialsException('Vous n\'avez les droits pour supprimer un produit de ce stock');
     }
 
     /**
@@ -187,9 +187,9 @@ class ProductController extends MainController
             } else {
                 return $form;
             }
+        } else {
+            throw new BadCredentialsException('Vous n\'avez les droits pour modifier un produit dans ce stock');
         }
-
-        throw new BadCredentialsException('Vous n\'avez les droits pour modifier un produit dans ce stock');
     }
 
 }
