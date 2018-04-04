@@ -50,11 +50,11 @@ class StockAccessController extends MainController
      * @param Request $request
      * @return mixed
      * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"access"})
-     * @Rest\Post("/accesses/stocks/{id}")
+     * @Rest\Post("/accesses")
      */
     public function postStockAccessAction(Request $request)
     {
-        $stockId = $request->get('id');
+        $stockId = $request->get('stock');
 
         if($this->isSuperAdmin($request, $stockId)){
             $stockAccess = new StockAccess();
