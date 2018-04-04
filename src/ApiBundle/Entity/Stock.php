@@ -39,7 +39,7 @@ class Stock
      * @var \DateTime
      *
      * @ORM\Column(name="createdAt", type="datetime", nullable=true)
-     * @Groups({"stock", "product", "access"})
+     * @Groups({"stock", "product"})
      */
     private $createdAt;
 
@@ -47,14 +47,14 @@ class Stock
      * @var \DateTime
      *
      * @ORM\Column(name="updatedAt", type="datetime", nullable=true)
-     * @Groups({"stock", "product", "access"})
+     * @Groups({"stock", "product"})
      * @Assert\DateTime()
      */
     private $updatedAt;
 
     /**
      * @ORM\OneToMany(targetEntity="ApiBundle\Entity\Product", mappedBy="stock", orphanRemoval=true)
-     * @Groups({"stock", "access"})
+     * @Groups({"stock"})
      * @var Products[]
      */
     private $products;

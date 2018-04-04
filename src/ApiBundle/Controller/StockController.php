@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
 class StockController extends MainController
 {
@@ -40,14 +41,20 @@ class StockController extends MainController
      */
     public function getStockAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $stock = $em->getRepository('ApiBundle:Stock')->find($request->get('id'));
+        $stockId = $request->get('id');
 
-        if (empty($stock)) {
-            throw new NotFoundHttpException('Stock not found');
+        if($this->isUser($request, $stockId)){
+            $em = $this->getDoctrine()->getManager();
+            $stock = $em->getRepository('ApiBundle:Stock')->find($request->get('id'));
+
+            if (empty($stock)) {
+                throw new NotFoundHttpException('Stock not found');
+            }
+
+            return $stock;
         }
 
-        return $stock;
+        throw new BadCredentialsException('Vous n\'avez les droits');
     }
 
     /**
@@ -85,13 +92,20 @@ class StockController extends MainController
      */
     public function removeStockAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $stock = $em->getRepository('ApiBundle:Stock')->find($request->get('id'));
 
-        if ($stock) {
-            $em->remove($stock);
-            $em->flush();
+        $stockId = $request->get('id');
+
+        if($this->isSuperAdmin($request, $stockId)){
+            $em = $this->getDoctrine()->getManager();
+            $stock = $em->getRepository('ApiBundle:Stock')->find($request->get('id'));
+
+            if ($stock) {
+                $em->remove($stock);
+                $em->flush();
+            }
         }
+
+        throw new BadCredentialsException('Vous n\'avez les droits sur ce stock pour le supprimer');
     }
 
 
@@ -119,27 +133,33 @@ class StockController extends MainController
 
     private function updateStock(Request $request, $clearMissing)
     {
-        $stock = $this->get('doctrine.orm.entity_manager')
-            ->getRepository('ApiBundle:Stock')
-            ->find($request->get('id'));
+        $stockId = $request->get('id');
 
-        if (empty($stock)) {
-            throw new NotFoundHttpException('Stock not found');
+        if($this->isSuperAdmin($request, $stockId)){
+            $stock = $this->get('doctrine.orm.entity_manager')
+                ->getRepository('ApiBundle:Stock')
+                ->find($request->get('id'));
+
+            if (empty($stock)) {
+                throw new NotFoundHttpException('Stock not found');
+            }
+
+            $form = $this->createForm(StockType::class, $stock);
+
+            $form->submit($request->request->all(), $clearMissing);
+
+            if ($form->isValid()) {
+                $em = $this->get('doctrine.orm.entity_manager');
+
+                $em->persist($stock);
+                $em->flush();
+                return $stock;
+            } else {
+                return $form;
+            }
         }
 
-        $form = $this->createForm(StockType::class, $stock);
-
-        $form->submit($request->request->all(), $clearMissing);
-
-        if ($form->isValid()) {
-            $em = $this->get('doctrine.orm.entity_manager');
-
-            $em->persist($stock);
-            $em->flush();
-            return $stock;
-        } else {
-            return $form;
-        }
+        throw new BadCredentialsException('Vous n\'avez les droits sur ce stock pour le modifier');
     }
 
 }

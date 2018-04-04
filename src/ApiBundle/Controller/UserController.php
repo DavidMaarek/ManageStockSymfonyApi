@@ -4,15 +4,16 @@ namespace ApiBundle\Controller;
 
 use ApiBundle\Entity\User;
 use ApiBundle\Form\UserType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
-class UserController extends Controller
+class UserController extends MainController
 {
 
+    // A supprimer
     /**
      * @Rest\View(serializerGroups={"user"})
      * @Rest\Get("/users")
@@ -33,14 +34,18 @@ class UserController extends Controller
      */
     public function getUserAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('ApiBundle:User')->find($request->get('id'));
+        if($this->isThisUser($request)){
+            $em = $this->getDoctrine()->getManager();
+            $user = $em->getRepository('ApiBundle:User')->find($request->get('id'));
 
-        if (empty($user)) {
-            throw new NotFoundHttpException('User not found');
+            if (empty($user)) {
+                throw new NotFoundHttpException('User not found');
+            }
+
+            return $user;
         }
 
-        return $user;
+        throw new BadCredentialsException('Vous n\'avez les droits pour afficher cet utilisateur');
     }
 
     /**
@@ -98,26 +103,30 @@ class UserController extends Controller
 
     private function updateUser(Request $request, $clearMissing)
     {
-        $user = $this->get('doctrine.orm.entity_manager')
-            ->getRepository('ApiBundle:User')
-            ->find($request->get('id'));
+        if($this->isThisUser($request)){
+            $user = $this->get('doctrine.orm.entity_manager')
+                ->getRepository('ApiBundle:User')
+                ->find($request->get('id'));
 
-        if (empty($user)) {
-            throw new NotFoundHttpException('User not found');
+            if (empty($user)) {
+                throw new NotFoundHttpException('Cet utilisateur n\'existe pas');
+            }
+
+            $form = $this->createForm(UserType::class, $user);
+
+            $form->submit($request->request->all(), $clearMissing);
+
+            if ($form->isValid()) {
+                $em = $this->get('doctrine.orm.entity_manager');
+
+                $em->persist($user);
+                $em->flush();
+                return $user;
+            } else {
+                return $form;
+            }
         }
 
-        $form = $this->createForm(UserType::class, $user);
-
-        $form->submit($request->request->all(), $clearMissing);
-
-        if ($form->isValid()) {
-            $em = $this->get('doctrine.orm.entity_manager');
-
-            $em->persist($user);
-            $em->flush();
-            return $user;
-        } else {
-            return $form;
-        }
+        throw new BadCredentialsException('Vous n\'avez les droits pour modifier cet utilisateur');
     }
 }

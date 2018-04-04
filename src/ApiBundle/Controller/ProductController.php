@@ -8,10 +8,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
 class ProductController extends MainController
 {
 
+    // A supprimer
     /**
      * @Rest\View(serializerGroups={"product"})
      * @Rest\Get("/products")
@@ -32,14 +34,20 @@ class ProductController extends MainController
      */
     public function getProductAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $product = $em->getRepository('ApiBundle:Product')->find($request->get('id'));
+        $stockId = $this->giveMeStockId($request);
 
-        if (empty($product)) {
-            throw new NotFoundHttpException('Product not found');
+        if ($this->isUser($request, $stockId)){
+            $em = $this->getDoctrine()->getManager();
+            $product = $em->getRepository('ApiBundle:Product')->find($request->get('id'));
+
+            if (empty($product)) {
+                throw new NotFoundHttpException('Ce produit n\'existe pas');
+            }
+
+            return $product;
         }
 
-        return $product;
+        throw new BadCredentialsException('Vous n\'avez les droits pour acceder à ce produit');
     }
 
     /**
@@ -52,7 +60,7 @@ class ProductController extends MainController
     {
         $stockId = $request->get('stock');
 
-        if($this->isSuperAdmin($request, $stockId)){
+        if($this->isAdmin($request, $stockId)){
             $product = new Product();
 
             $form = $this->createForm(ProductType::class, $product);
@@ -86,6 +94,8 @@ class ProductController extends MainController
                 return $form;
             }
         }
+
+        throw new BadCredentialsException('Vous n\'avez les droits pour ajouter un produit à ce stock');
     }
 
     /**
@@ -96,14 +106,22 @@ class ProductController extends MainController
      */
     public function removeProductAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $product = $em->getRepository('ApiBundle:Product')
-            ->find($request->get('id'));
+        $stockId = $this->giveMeStockId($request);
 
-        if ($product) {
-            $em->remove($product);
-            $em->flush();
+        if ($this->isSuperAdmin($request, $stockId)){
+            $em = $this->getDoctrine()->getManager();
+            $product = $em->getRepository('ApiBundle:Product')
+                ->find($request->get('id'));
+
+            if (empty($product)) {
+                throw new NotFoundHttpException('Ce produit n\'existe pas');
+            } elseif ($product) {
+                $em->remove($product);
+                $em->flush();
+            }
         }
+
+        throw new BadCredentialsException('Vous n\'avez les droits pour supprimer un produit de ce stock');
     }
 
     /**
@@ -130,42 +148,48 @@ class ProductController extends MainController
 
     private function updateProduct(Request $request, $clearMissing)
     {
-        $product = $this->get('doctrine.orm.entity_manager')
-            ->getRepository('ApiBundle:Product')
-            ->find($request->get('id'));
+        $stockId = $request->get('id');
 
-        if (empty($product)) {
-            throw new NotFoundHttpException('Product not found');
+        if($this->isAdmin($request, $stockId)){
+            $product = $this->get('doctrine.orm.entity_manager')
+                ->getRepository('ApiBundle:Product')
+                ->find($request->get('id'));
+
+            if (empty($product)) {
+                throw new NotFoundHttpException('Ce produit n\'existe pas');
+            }
+
+            $form = $this->createForm(ProductType::class, $product);
+
+            $form->submit($request->request->all(), $clearMissing);
+
+            if ($form->isValid()) {
+                $em = $this->get('doctrine.orm.entity_manager');
+
+                /*$picture1 = $this->container->get('app.file_uploader')->upload($product->getPicture1());
+                $product->setPicture1($picture1);
+
+                $picture2 = $this->container->get('app.file_uploader')->upload($product->getPicture2());
+                $product->setPicture2($picture2);
+
+                $picture3 = $this->container->get('app.file_uploader')->upload($product->getPicture3());
+                $product->setPicture3($picture3);
+
+                $picture4 = $this->container->get('app.file_uploader')->upload($product->getPicture4());
+                $product->setPicture4($picture4);
+
+                $picture5 = $this->container->get('app.file_uploader')->upload($product->getPicture5());
+                $product->setPicture5($picture5);*/
+
+                $em->persist($product);
+                $em->flush();
+                return $product;
+            } else {
+                return $form;
+            }
         }
 
-        $form = $this->createForm(ProductType::class, $product);
-
-        $form->submit($request->request->all(), $clearMissing);
-
-        if ($form->isValid()) {
-            $em = $this->get('doctrine.orm.entity_manager');
-
-            /*$picture1 = $this->container->get('app.file_uploader')->upload($product->getPicture1());
-            $product->setPicture1($picture1);
-
-            $picture2 = $this->container->get('app.file_uploader')->upload($product->getPicture2());
-            $product->setPicture2($picture2);
-
-            $picture3 = $this->container->get('app.file_uploader')->upload($product->getPicture3());
-            $product->setPicture3($picture3);
-
-            $picture4 = $this->container->get('app.file_uploader')->upload($product->getPicture4());
-            $product->setPicture4($picture4);
-
-            $picture5 = $this->container->get('app.file_uploader')->upload($product->getPicture5());
-            $product->setPicture5($picture5);*/
-
-            $em->persist($product);
-            $em->flush();
-            return $product;
-        } else {
-            return $form;
-        }
+        throw new BadCredentialsException('Vous n\'avez les droits pour modifier un produit dans ce stock');
     }
 
 }

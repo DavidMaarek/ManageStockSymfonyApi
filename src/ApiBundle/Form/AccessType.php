@@ -19,6 +19,9 @@ class AccessType extends AbstractType
             ->add('role', IntegerType::class)
             ->add('user', EntityType::class, [
                 'class' => 'ApiBundle:User'
+            ])
+            ->add('stock', EntityType::class, [
+                'class' => 'ApiBundle:Stock'
             ]);
     }
 
