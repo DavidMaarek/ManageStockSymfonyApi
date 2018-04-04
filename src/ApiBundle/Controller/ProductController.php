@@ -34,7 +34,8 @@ class ProductController extends MainController
      */
     public function getProductAction(Request $request)
     {
-        $stockId = $this->giveMeStockId($request);
+        $productId = $request->get('id');
+        $stockId = $this->giveMeStockIdByProductId($productId);
 
         if ($this->isUser($request, $stockId)){
             $em = $this->getDoctrine()->getManager();
@@ -106,7 +107,8 @@ class ProductController extends MainController
      */
     public function removeProductAction(Request $request)
     {
-        $stockId = $this->giveMeStockId($request);
+        $productId = $request->get('id');
+        $stockId = $this->giveMeStockIdByProductId($productId);
 
         if ($this->isSuperAdmin($request, $stockId)){
             $em = $this->getDoctrine()->getManager();

@@ -62,9 +62,9 @@ class MainController extends Controller{
     }
 
     // Retourne l'id du stock du produit en question
-    public function giveMeStockId($request){
+    public function giveMeStockIdByProductId($productId){
         $em = $this->getDoctrine()->getManager();
-        $product = $em->getRepository('ApiBundle:Product')->find($request->get('id'));
+        $product = $em->getRepository('ApiBundle:Product')->find($productId);
 
         if (empty($product)) {
             throw new NotFoundHttpException('Ce produit n\'existe pas');
@@ -129,6 +129,48 @@ class MainController extends Controller{
         }
 
         return false;
+    }
+
+    public function historyCheckSameUser($request){
+        $token = $request->headers->get('X-Auth-Token');
+
+        $userToken =  $this->get('doctrine.orm.entity_manager')
+            ->getRepository('ApiBundle:AuthToken')
+            ->findOneBy(array(
+                "value" => $token
+            ));
+
+        $userIdToken = $userToken->getUser()->getId();
+
+        $userIdRequest = $request->get('user');
+
+        if($userIdToken == $userIdRequest){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function historyUpdateProduct($productId, $quantity, $type){
+        $em = $this->getDoctrine()->getManager();
+
+        $product =  $em->getRepository('ApiBundle:Product')
+            ->findOneBy(array(
+                "id" => $productId
+            ));
+
+        $oldQuantity = $product->getQuantity();
+
+        if($type == 'add'){
+            $newQuantity = $oldQuantity + $quantity;
+        } elseif ($type == 'remove') {
+            $newQuantity = $oldQuantity - $quantity;
+        }
+
+
+        $product->setQuantity($newQuantity);
+        $em->persist($product);
+        $em->flush();
     }
 
 }

@@ -21,7 +21,7 @@ class Product
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"product", "stock"})
+     * @Groups({"product", "stock", "history"})
      */
     private $id;
 
@@ -29,7 +29,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
-     * @Groups({"product", "stock"})
+     * @Groups({"product", "stock", "history"})
      * @Assert\NotBlank()
      */
     private $name;
@@ -259,6 +259,28 @@ class Product
      * @Groups({"product"})
      */
     private $stock;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ApiBundle\Entity\History", mappedBy="product", cascade={"remove"})
+     * @Groups({"user"})
+     */
+    private $history;
+
+    /**
+     * @return mixed
+     */
+    public function getHistory()
+    {
+        return $this->history;
+    }
+
+    /**
+     * @param mixed $history
+     */
+    public function setHistory($history)
+    {
+        $this->history = $history;
+    }
     
     /**
      * @return mixed
