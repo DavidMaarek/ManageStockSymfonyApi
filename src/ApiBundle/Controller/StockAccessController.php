@@ -82,6 +82,63 @@ class StockAccessController extends MainController
     /**
      * @param Request $request
      * @return mixed
+     * @Rest\View(serializerGroups={"access"})
+     * @Rest\Put("/accesses/stocks/{stock_id}/users/{user_id}")
+     */
+    public function updateStockAccessAction(Request $request)
+    {
+        return $this->updateStockAccess($request, true);
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     * @Rest\View(serializerGroups={"access"})
+     * @Rest\Patch("/accesses/stocks/{stock_id}/users/{user_id}")
+     */
+    public function patchStockAccessAction(Request $request)
+    {
+        return $this->updateStockAccess($request, false);
+    }
+
+    private function updateStockAccess(Request $request, $clearMissing)
+    {
+        $stockId = $request->get('stock_id');
+        $userId = $request->get('user_id');
+
+        if($this->isSuperAdmin($request, $stockId)){
+            $stockAccess = $this->get('doctrine.orm.entity_manager')
+                ->getRepository('ApiBundle:StockAccess')
+                ->findOneBy(array(
+                    "user" => $userId,
+                    "stock" => $stockId
+                ));
+
+            if (empty($stockAccess)) {
+                throw new NotFoundHttpException('Cet access n\'existe pas');
+            }
+
+            $form = $this->createForm(AccessType::class, $stockAccess);
+
+            $form->submit($request->request->all(), $clearMissing);
+
+            if ($form->isValid()) {
+                $em = $this->get('doctrine.orm.entity_manager');
+
+                $em->persist($stockAccess);
+                $em->flush();
+                return $stockAccess;
+            } else {
+                return $form;
+            }
+        } else {
+            throw new BadCredentialsException('Vous n\'avez les droits pour modifier les access d\'un utilisateur dans ce stock');
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
      * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
      * @Rest\Delete("/accesses/stocks/{stock_id}/users/{user_id}")
      */

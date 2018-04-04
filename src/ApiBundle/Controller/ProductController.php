@@ -127,7 +127,7 @@ class ProductController extends MainController
     /**
      * @param Request $request
      * @return mixed
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"product"})
      * @Rest\Put("/products/{id}")
      */
     public function updateProductAction(Request $request)
@@ -138,7 +138,7 @@ class ProductController extends MainController
     /**
      * @param Request $request
      * @return mixed
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"product"})
      * @Rest\Patch("/products/{id}")
      */
     public function patchProductAction(Request $request)
@@ -191,5 +191,4 @@ class ProductController extends MainController
             throw new BadCredentialsException('Vous n\'avez les droits pour modifier un produit dans ce stock');
         }
     }
-
 }
