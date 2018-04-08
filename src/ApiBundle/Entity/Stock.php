@@ -22,7 +22,7 @@ class Stock
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"stock", "product", "access", "user", "history"})
+     * @Groups({"home", "histories", "stock"})
      */
     private $id;
 
@@ -30,7 +30,7 @@ class Stock
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
-     * @Groups({"stock", "product", "access"})
+     * @Groups({"home", "histories", "stock"})
      * @Assert\NotBlank(message="Value not be blank")
      */
     private $name;
@@ -39,7 +39,7 @@ class Stock
      * @var \DateTime
      *
      * @ORM\Column(name="createdAt", type="datetime", nullable=true)
-     * @Groups({"stock", "product"})
+
      */
     private $createdAt;
 
@@ -47,21 +47,21 @@ class Stock
      * @var \DateTime
      *
      * @ORM\Column(name="updatedAt", type="datetime", nullable=true)
-     * @Groups({"stock", "product"})
+
      * @Assert\DateTime()
      */
     private $updatedAt;
 
     /**
      * @ORM\OneToMany(targetEntity="ApiBundle\Entity\Product", mappedBy="stock", orphanRemoval=true)
-     * @Groups({"stock"})
+     * @Groups({"home"})
      * @var Products[]
      */
     private $products;
 
     /**
      * @ORM\OneToMany(targetEntity="StockAccess", mappedBy="stock", cascade={"persist"}, orphanRemoval=true)
-     * @Groups({"stock", "product"})
+     * @Groups({"stock"})
      * @var StockAccesses[]
      * @Assert\Valid()
      */

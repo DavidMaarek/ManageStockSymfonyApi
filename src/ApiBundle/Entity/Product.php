@@ -21,7 +21,7 @@ class Product
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"product", "stock", "history"})
+     * @Groups({"home", "histories"})
      */
     private $id;
 
@@ -29,7 +29,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
-     * @Groups({"product", "stock", "history"})
+     * @Groups({"home", "histories"})
      * @Assert\NotBlank()
      */
     private $name;
@@ -38,7 +38,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="reference", type="string", length=255)
-     * @Groups({"product", "stock"})
+
      * @Assert\NotBlank()
      */
     private $reference;
@@ -47,7 +47,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="quantity", type="integer", length=255)
-     * @Groups({"product", "stock"})
+     * @Groups({"home"})
      * @Assert\NotBlank()
      * @Assert\Type("integer")
      */
@@ -57,7 +57,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=true)
-     * @Groups({"product", "stock"})
+
      */
     private $description;
 
@@ -65,7 +65,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="picture1", type="string", length=255, nullable=true)
-     * @Groups({"product", "stock"})
+
      * @Assert\Image(mimeTypes = {"image/jpg", "image/jpeg", "image/png"})
      */
     private $picture1;
@@ -74,7 +74,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="picture2", type="string", length=255, nullable=true)
-     * @Groups({"product", "stock"})
+
      * @Assert\Image(mimeTypes = {"image/jpg", "image/jpeg", "image/png"})
      */
     private $picture2;
@@ -83,7 +83,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="picture3", type="string", length=255, nullable=true)
-     * @Groups({"product", "stock"})
+
      * @Assert\Image(mimeTypes = {"image/jpg", "image/jpeg", "image/png"})
      */
     private $picture3;
@@ -92,7 +92,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="picture4", type="string", length=255, nullable=true)
-     * @Groups({"product", "stock"})
+
      * @Assert\Image(mimeTypes = {"image/jpg", "image/jpeg", "image/png"})
      */
     private $picture4;
@@ -101,7 +101,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="picture5", type="string", length=255, nullable=true)
-     * @Groups({"product", "stock"})
+
      * @Assert\Image(mimeTypes = {"image/jpg", "image/jpeg", "image/png"})
      */
     private $picture5;
@@ -110,7 +110,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="pdf", type="string", length=255, nullable=true)
-     * @Groups({"product", "stock"})
+
      * @Assert\File(mimeTypes = {"application/pdf", "application/x-pdf"})
      */
     private $pdf;
@@ -119,7 +119,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="zip", type="string", length=255, nullable=true)
-     * @Groups({"product", "stock"})
+
      * Assert\File(mimeTypes = {"application/zip"})
      */
     private $zip;
@@ -240,7 +240,7 @@ class Product
      * @var \DateTime
      *
      * @ORM\Column(name="createdAt", type="datetime", nullable=true)
-     * @Groups({"product", "stock"})
+
      */
     private $createdAt;
 
@@ -248,7 +248,7 @@ class Product
      * @var \DateTime
      *
      * @ORM\Column(name="updatedAt", type="datetime", nullable=true)
-     * @Groups({"product", "stock"})
+
      * @Assert\DateTime()
      */
     private $updatedAt;
@@ -256,13 +256,13 @@ class Product
     /**
      * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\Stock", inversedBy="products")
      * @ORM\JoinColumn(name="stock_id", referencedColumnName="id")
-     * @Groups({"product", "history"})
+     * @Groups({"histories"})
      */
     private $stock;
 
     /**
      * @ORM\OneToMany(targetEntity="ApiBundle\Entity\History", mappedBy="product", cascade={"remove"})
-     * @Groups({"user"})
+
      */
     private $history;
 

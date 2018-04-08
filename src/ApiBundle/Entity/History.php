@@ -20,7 +20,7 @@ class History
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"history", "product"})
+     * @Groups({"histories"})
      */
     private $id;
 
@@ -28,7 +28,7 @@ class History
      * @var int
      *
      * @ORM\Column(name="quantity", type="integer")
-     * @Groups({"history", "product"})
+     * @Groups({"histories"})
      */
     private $quantity;
 
@@ -36,7 +36,7 @@ class History
      * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime")
-     * @Groups({"history", "product"})
+     * @Groups({"histories"})
      */
     private $date;
 
@@ -44,7 +44,7 @@ class History
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=255)
-     * @Groups({"history", "product"})
+     * @Groups({"histories"})
      */
     private $type;
 
@@ -52,14 +52,14 @@ class History
     /**
      * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\Product", inversedBy="history")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
-     * @Groups({"history"})
+     * @Groups({"histories"})
      */
     private $product;
 
     /**
      * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\User", inversedBy="history")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     * @Groups({"history", "product"})
+     * @Groups({"histories"})
      */
     private $user;
 

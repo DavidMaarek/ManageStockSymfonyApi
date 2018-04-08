@@ -21,7 +21,7 @@ class User implements UserInterface
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"user", "access", "stock", "auth-token", "history"})
+     * @Groups({"histories", "stock"})
      */
     private $id;
 
@@ -29,7 +29,7 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
-     * @Groups({"user", "access", "auth-token", "history"})
+     * @Groups({"histories", "stock"})
      * @Assert\NotBlank(message="Vous devez renseigner un nom")
      */
     private $name;
@@ -38,7 +38,7 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="firstname", type="string", length=255)
-     * @Groups({"user", "access", "auth-token", "history"})
+     * @Groups({"histories", "stock"})
      * @Assert\NotBlank(message="Vous devez renseigner un prénom")
      */
     private $firstname;
@@ -47,7 +47,7 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
-     * @Groups({"user", "access", "auth-token"})
+
      * @Assert\NotBlank(message="Vous devez renseigner un email")
      * @Assert\Email()
      */
@@ -78,13 +78,13 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="society", type="string", length=255, nullable=true)
-     * @Groups({"user", "access"})
+
      */
     private $society;
 
     /**
      * @ORM\OneToMany(targetEntity="StockAccess", mappedBy="user", cascade={"remove"})
-     * @Groups({"user"})
+
      */
     private $access;
 

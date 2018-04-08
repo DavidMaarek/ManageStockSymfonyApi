@@ -16,7 +16,7 @@ class HistoryController extends MainController
     /**
      * @param Request $request
      * @return mixed
-     * @Rest\View(serializerGroups={"history"})
+     * @Rest\View(serializerGroups={"histories"})
      * @Rest\Get("/histories")
      */
     public function getHistoriesAction(Request $request)
