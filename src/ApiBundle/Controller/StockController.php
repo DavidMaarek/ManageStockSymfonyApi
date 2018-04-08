@@ -15,8 +15,8 @@ class StockController extends MainController
     /**
      * @param Request $request
      * @return mixed
-     * @Rest\View(serializerGroups={"stock"})
-     * @Rest\Get("/stocks")
+     * @Rest\View(serializerGroups={"home"})
+     * @Rest\Get("/home")
     */
     public function getStocksAction(Request $request)
     {

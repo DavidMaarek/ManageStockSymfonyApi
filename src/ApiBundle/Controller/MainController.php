@@ -38,24 +38,19 @@ class MainController extends Controller{
 
     // Retourne un tableau avec tous les ids des stocks dont l'utilisateur est contributeur
     public function giveMeUsersStocks($request){
-        $token = $request->headers->get('X-Auth-Token');
+        $userId = $this->giveMeUserId($request);
 
-        $user =  $this->get('doctrine.orm.entity_manager')
-            ->getRepository('ApiBundle:AuthToken')
-            ->findOneBy(array(
-                "value" => $token
-            ));
 
         $stocks =  $this->get('doctrine.orm.entity_manager')
             ->getRepository('ApiBundle:StockAccess')
             ->findBy(array(
-                "user" => $user->getUser()->getId()
+                "user" => $userId
             ));
 
         $stocksId = [];
 
         foreach ($stocks as $stock){
-            $stocksId[] = $stock->getId();
+            $stocksId[] = $stock->getStock();
         }
 
         return $stocksId;

@@ -21,12 +21,19 @@ class HistoryController extends MainController
      */
     public function getHistoriesAction(Request $request)
     {
+        $stocksId = $this->giveMeUsersStocks($request);
 
         $em = $this->getDoctrine()->getManager();
 
-        $history = $em->getRepository('ApiBundle:History')->findAll();
+        $products = $em->getRepository('ApiBundle:Product')->findByStock($stocksId);
 
-        return $history;
+        $histories = [];
+
+        foreach ($products as $product){
+            $histories = $product->getHistory();
+        }
+
+        return $histories;
     }
 
     /**

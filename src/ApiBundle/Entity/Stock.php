@@ -22,7 +22,7 @@ class Stock
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"stock", "product", "access", "user"})
+     * @Groups({"stock", "product", "access", "user", "history"})
      */
     private $id;
 

@@ -38,7 +38,7 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="firstname", type="string", length=255)
-     * @Groups({"user", "access", "auth-token"})
+     * @Groups({"user", "access", "auth-token", "history"})
      * @Assert\NotBlank(message="Vous devez renseigner un prénom")
      */
     private $firstname;

@@ -256,7 +256,7 @@ class Product
     /**
      * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\Stock", inversedBy="products")
      * @ORM\JoinColumn(name="stock_id", referencedColumnName="id")
-     * @Groups({"product"})
+     * @Groups({"product", "history"})
      */
     private $stock;
 
