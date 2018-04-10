@@ -30,7 +30,7 @@ class AuthTokenController extends Controller
             return $form;
         }
 
-        $em = $this->get('doctrine.orm.entity_manager');
+        $em = $this->getDoctrine()->getManager();
 
         $user = $em->getRepository('ApiBundle:User')->findOneByEmail($credentials->getLogin());
 
@@ -67,7 +67,7 @@ class AuthTokenController extends Controller
      */
     public function removeAuthTokenAction(Request $request)
     {
-        $em = $this->get('doctrine.orm.entity_manager');
+        $em = $this->getDoctrine()->getManager();
         $authToken = $em->getRepository('ApiBundle:AuthToken')->find($request->get('id'));
 
         $connectedUser = $this->get('security.token_storage')->getToken()->getUser();

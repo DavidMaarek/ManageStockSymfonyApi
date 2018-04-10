@@ -126,7 +126,7 @@ class StockController extends MainController
             $form->submit($request->request->all(), $clearMissing);
 
             if ($form->isValid()) {
-                $em = $this->get('doctrine.orm.entity_manager');
+                $em = $this->getDoctrine()->getManager();
 
                 $em->persist($stock);
                 $em->flush();

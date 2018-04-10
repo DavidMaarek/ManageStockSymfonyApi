@@ -126,7 +126,7 @@ class ProductController extends MainController
     /**
      * @param Request $request
      * @return mixed
-     * @Rest\View(serializerGroups={"product"})
+     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
      * @Rest\Patch("/products/{id}")
      */
     public function patchProductAction(Request $request)
@@ -136,23 +136,23 @@ class ProductController extends MainController
 
     private function updateProduct(Request $request, $clearMissing)
     {
-        $stockId = $request->get('id');
+        $em = $this->getDoctrine()->getManager();
+
+        $product = $em->getRepository('ApiBundle:Product')->findOneById($request->get('id'));
+
+        if (empty($product)) {
+            throw new NotFoundHttpException('Ce produit n\'existe pas');
+        }
+
+        $stockId = $product->getStock();
 
         if($this->isAdmin($request, $stockId)){
-            $product = $this->get('doctrine.orm.entity_manager')
-                ->getRepository('ApiBundle:Product')
-                ->find($request->get('id'));
-
-            if (empty($product)) {
-                throw new NotFoundHttpException('Ce produit n\'existe pas');
-            }
-
             $form = $this->createForm(ProductType::class, $product);
 
             $form->submit($request->request->all(), $clearMissing);
 
             if ($form->isValid()) {
-                $em = $this->get('doctrine.orm.entity_manager');
+                $em = $this->getDoctrine()->getManager();
 
                 /*$picture1 = $this->container->get('app.file_uploader')->upload($product->getPicture1());
                 $product->setPicture1($picture1);
@@ -171,7 +171,6 @@ class ProductController extends MainController
 
                 $em->persist($product);
                 $em->flush();
-                return $product;
             } else {
                 return $form;
             }
