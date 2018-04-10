@@ -15,26 +15,6 @@ class StockAccessController extends MainController
     /**
      * @param Request $request
      * @return mixed
-     * @Rest\View(serializerGroups={"access"})
-     * @Rest\Get("/accesses/stocks/{id}")
-     */
-    public function getAccessesOnOneStockAction(Request $request)
-    {
-        $stockId = $request->get('id');
-
-        if($this->isSuperAdmin($request, $stockId)){
-            $em = $this->getDoctrine()->getManager();
-            $stockAccesses = $em->getRepository('ApiBundle:StockAccess')->findBy(['stock' => $stockId]);
-
-            return $stockAccesses;
-        } else {
-            throw new BadCredentialsException('Vous n\'avez les droits pour afficher les access de ce stock');
-        }
-    }
-
-    /**
-     * @param Request $request
-     * @return mixed
      * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"access"})
      * @Rest\Post("/accesses")
      */
