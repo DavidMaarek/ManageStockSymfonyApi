@@ -12,20 +12,6 @@ use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
 class UserController extends MainController
 {
-
-    // A supprimer
-    /**
-     * @Rest\View(serializerGroups={"user"})
-     * @Rest\Get("/users")
-     */
-    public function getUsersAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $users = $em->getRepository('ApiBundle:User')->findAll();
-
-        return $users;
-    }
-
     /**
      * @param Request $request
      * @return mixed

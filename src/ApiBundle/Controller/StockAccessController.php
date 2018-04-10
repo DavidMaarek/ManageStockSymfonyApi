@@ -12,20 +12,6 @@ use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
 class StockAccessController extends MainController
 {
-
-    // A supprimer
-    /**
-     * @Rest\View(serializerGroups={"access"})
-     * @Rest\Get("/accesses")
-     */
-    public function getAccessesAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $stockAccesses = $em->getRepository('ApiBundle:StockAccess')->findAll();
-
-        return $stockAccesses;
-    }
-
     /**
      * @param Request $request
      * @return mixed

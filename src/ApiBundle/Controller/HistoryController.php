@@ -16,29 +16,6 @@ class HistoryController extends MainController
     /**
      * @param Request $request
      * @return mixed
-     * @Rest\View(serializerGroups={"histories"})
-     * @Rest\Get("/histories")
-     */
-    public function getHistoriesAction(Request $request)
-    {
-        $stocksId = $this->giveMeUsersStocks($request);
-
-        $em = $this->getDoctrine()->getManager();
-
-        $products = $em->getRepository('ApiBundle:Product')->findByStock($stocksId);
-
-        $histories = [];
-
-        foreach ($products as $product){
-            $histories = $product->getHistory();
-        }
-
-        return $histories;
-    }
-
-    /**
-     * @param Request $request
-     * @return mixed
      * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"history"})
      * @Rest\Post("/histories/{type}")
      */

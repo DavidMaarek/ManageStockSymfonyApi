@@ -12,20 +12,6 @@ use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
 class ProductController extends MainController
 {
-
-    // A supprimer
-    /**
-     * @Rest\View(serializerGroups={"product"})
-     * @Rest\Get("/products")
-    */
-    public function getProductsAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $products = $em->getRepository('ApiBundle:Product')->findAll();
-
-        return $products;
-    }
-
     /**
      * @param Request $request
      * @return mixed
