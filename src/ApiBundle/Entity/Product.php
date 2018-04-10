@@ -21,7 +21,7 @@ class Product
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"home", "histories"})
+     * @Groups({"home", "histories", "product"})
      */
     private $id;
 
@@ -29,7 +29,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
-     * @Groups({"home", "histories"})
+     * @Groups({"home", "histories", "product"})
      * @Assert\NotBlank()
      */
     private $name;
@@ -38,7 +38,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="reference", type="string", length=255)
-
+     * @Groups({"product"})
      * @Assert\NotBlank()
      */
     private $reference;
@@ -47,7 +47,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="quantity", type="integer", length=255)
-     * @Groups({"home"})
+     * @Groups({"home", "product"})
      * @Assert\NotBlank()
      * @Assert\Type("integer")
      */
@@ -57,7 +57,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=true)
-
+     * @Groups({"product"})
      */
     private $description;
 
@@ -65,7 +65,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="picture1", type="string", length=255, nullable=true)
-
+     * @Groups({"product"})
      * @Assert\Image(mimeTypes = {"image/jpg", "image/jpeg", "image/png"})
      */
     private $picture1;
@@ -74,7 +74,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="picture2", type="string", length=255, nullable=true)
-
+     * @Groups({"product"})
      * @Assert\Image(mimeTypes = {"image/jpg", "image/jpeg", "image/png"})
      */
     private $picture2;
@@ -83,7 +83,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="picture3", type="string", length=255, nullable=true)
-
+     * @Groups({"product"})
      * @Assert\Image(mimeTypes = {"image/jpg", "image/jpeg", "image/png"})
      */
     private $picture3;
@@ -92,7 +92,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="picture4", type="string", length=255, nullable=true)
-
+     * @Groups({"product"})
      * @Assert\Image(mimeTypes = {"image/jpg", "image/jpeg", "image/png"})
      */
     private $picture4;
@@ -101,7 +101,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="picture5", type="string", length=255, nullable=true)
-
+     * @Groups({"product"})
      * @Assert\Image(mimeTypes = {"image/jpg", "image/jpeg", "image/png"})
      */
     private $picture5;
@@ -123,6 +123,36 @@ class Product
      * Assert\File(mimeTypes = {"application/zip"})
      */
     private $zip;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="createdAt", type="datetime", nullable=true)
+
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updatedAt", type="datetime", nullable=true)
+
+     * @Assert\DateTime()
+     */
+    private $updatedAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\Stock", inversedBy="products")
+     * @ORM\JoinColumn(name="stock_id", referencedColumnName="id")
+     * @Groups({"histories"})
+     */
+    private $stock;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ApiBundle\Entity\History", mappedBy="product", cascade={"remove"})
+     * @Groups({"product"})
+     */
+    private $history;
 
     /**
      * @return string
@@ -236,35 +266,6 @@ class Product
         $this->zip = $zip;
     }
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="createdAt", type="datetime", nullable=true)
-
-     */
-    private $createdAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="updatedAt", type="datetime", nullable=true)
-
-     * @Assert\DateTime()
-     */
-    private $updatedAt;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\Stock", inversedBy="products")
-     * @ORM\JoinColumn(name="stock_id", referencedColumnName="id")
-     * @Groups({"histories"})
-     */
-    private $stock;
-
-    /**
-     * @ORM\OneToMany(targetEntity="ApiBundle\Entity\History", mappedBy="product", cascade={"remove"})
-
-     */
-    private $history;
 
     /**
      * @return mixed
@@ -281,7 +282,7 @@ class Product
     {
         $this->history = $history;
     }
-    
+
     /**
      * @return mixed
      */
