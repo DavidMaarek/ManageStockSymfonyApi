@@ -15,7 +15,27 @@ class StockAccessController extends MainController
     /**
      * @param Request $request
      * @return mixed
-     * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"access"})
+     * @Rest\View(serializerGroups={"access"})
+     * @Rest\Get("/accesses/{id}")
+     */
+    public function getAccessAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $stockAccess = $em->getRepository('ApiBundle:StockAccess')->findOneById($request->get('id'));
+
+        $stockId = $stockAccess->getStock();
+
+        if($this->isSuperAdmin($request, $stockId)){
+            return $stockAccess;
+        } else {
+            throw new BadCredentialsException('Vous n\'avez les droits pour afficher les access de ce stock');
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     * @Rest\View(statusCode=Response::HTTP_CREATED)
      * @Rest\Post("/accesses")
      */
     public function postStockAccessAction(Request $request)
@@ -34,10 +54,7 @@ class StockAccessController extends MainController
 
                 $em->persist($stockAccess);
                 $em->flush();
-
-                return $stockAccess;
             } else {
-
                 return $form;
             }
         } else {
@@ -48,7 +65,6 @@ class StockAccessController extends MainController
     /**
      * @param Request $request
      * @return mixed
-     * @Rest\View(serializerGroups={"access"})
      * @Rest\Put("/accesses/stocks/{stock_id}/users/{user_id}")
      */
     public function updateStockAccessAction(Request $request)
@@ -59,7 +75,6 @@ class StockAccessController extends MainController
     /**
      * @param Request $request
      * @return mixed
-     * @Rest\View(serializerGroups={"access"})
      * @Rest\Patch("/accesses/stocks/{stock_id}/users/{user_id}")
      */
     public function patchStockAccessAction(Request $request)
@@ -93,7 +108,6 @@ class StockAccessController extends MainController
 
                 $em->persist($stockAccess);
                 $em->flush();
-                return $stockAccess;
             } else {
                 return $form;
             }

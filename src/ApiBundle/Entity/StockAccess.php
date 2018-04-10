@@ -20,7 +20,7 @@ class StockAccess
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"stock", "profileStock"})
+     * @Groups({"stock", "profileStock", "access"})
      */
     private $id;
 
@@ -28,7 +28,7 @@ class StockAccess
      * @var int
      *
      * @ORM\Column(name="role", type="integer")
-     * @Groups({"stock", "profileStock"})
+     * @Groups({"stock", "profileStock", "access"})
      * @Assert\NotBlank()
      * @Assert\Type("integer")
      * @Assert\Range(
@@ -50,7 +50,7 @@ class StockAccess
     /**
      * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\User", inversedBy="access")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     * @Groups({"stock", "profileStock"})
+     * @Groups({"stock", "profileStock", "access"})
      * @Assert\NotBlank()
      */
     private $user;
