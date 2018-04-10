@@ -120,27 +120,23 @@ class StockAccessController extends MainController
      * @param Request $request
      * @return mixed
      * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
-     * @Rest\Delete("/accesses/stocks/{stock_id}/users/{user_id}")
+     * @Rest\Delete("/accesses/{id}")
      */
     public function removeStockAccessAction(Request $request)
     {
-        $stockId = $request->get('stock_id');
-        $userId = $request->get('user_id');
+        $em = $this->getDoctrine()->getManager();
+
+        $stockAccess = $em->getRepository('ApiBundle:StockAccess')->findOneById($request->get('id'));
+
+        if (empty($stockAccess)) {
+            throw new NotFoundHttpException('Cet access n\'existe pas');
+        }
+
+        $stockId = $stockAccess->getStock();
 
         if ($this->isSuperAdmin($request, $stockId)){
-            $em = $this->getDoctrine()->getManager();
-            $stockAccess = $em->getRepository('ApiBundle:StockAccess')
-                ->findOneBy(array(
-                    "user" => $userId,
-                    "stock" => $stockId
-                ));
-
-            if (empty($stockAccess)) {
-                throw new NotFoundHttpException('Cet access n\'existe pas');
-            } elseif ($stockAccess) {
-                $em->remove($stockAccess);
-                $em->flush();
-            }
+            $em->remove($stockAccess);
+            $em->flush();
         } else {
             throw new BadCredentialsException('Vous n\'avez les droits pour supprimer un utilisateur de ce stock');
         }
