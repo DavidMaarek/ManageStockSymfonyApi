@@ -21,7 +21,7 @@ class User implements UserInterface
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"histories", "stock", "product"})
+     * @Groups({"histories", "stock", "product", "profile"})
      */
     private $id;
 
@@ -29,7 +29,7 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
-     * @Groups({"histories", "stock", "product"})
+     * @Groups({"histories", "stock", "product", "profile"})
      * @Assert\NotBlank(message="Vous devez renseigner un nom")
      */
     private $name;
@@ -38,7 +38,7 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="firstname", type="string", length=255)
-     * @Groups({"histories", "stock", "product"})
+     * @Groups({"histories", "stock", "product", "profile"})
      * @Assert\NotBlank(message="Vous devez renseigner un prénom")
      */
     private $firstname;
@@ -47,11 +47,19 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
-
+     * @Groups({"profile"})
      * @Assert\NotBlank(message="Vous devez renseigner un email")
      * @Assert\Email()
      */
     private $email;
+
+    /**
+     * @var string
+     * @Groups({"profile"})
+     * @ORM\Column(name="society", type="string", length=255, nullable=true)
+
+     */
+    private $society;
 
     /**
      * @var string
@@ -73,14 +81,6 @@ class User implements UserInterface
     {
         return $this->plainPassword;
     }
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="society", type="string", length=255, nullable=true)
-
-     */
-    private $society;
 
     /**
      * @ORM\OneToMany(targetEntity="StockAccess", mappedBy="user", cascade={"remove"})

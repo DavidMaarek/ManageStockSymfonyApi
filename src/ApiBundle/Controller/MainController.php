@@ -37,7 +37,7 @@ class MainController extends Controller{
     }
 
     // Retourne un tableau avec tous les ids des stocks dont l'utilisateur est contributeur
-    public function giveMeUsersStocks($request){
+    public function giveMeUserStocks($request){
         $userId = $this->giveMeUserId($request);
 
 
@@ -45,6 +45,26 @@ class MainController extends Controller{
             ->getRepository('ApiBundle:StockAccess')
             ->findBy(array(
                 "user" => $userId
+            ));
+
+        $stocksId = [];
+
+        foreach ($stocks as $stock){
+            $stocksId[] = $stock->getStock();
+        }
+
+        return $stocksId;
+    }
+
+    // Retourne un tableau avec tous les ids des stocks dont l'utilisateur est superAdmin
+    public function giveMeUserStocksSuperAdmin($request){
+        $userId = $this->giveMeUserId($request);
+
+        $stocks =  $this->get('doctrine.orm.entity_manager')
+            ->getRepository('ApiBundle:StockAccess')
+            ->findBy(array(
+                "user" => $userId,
+                "role" => 0
             ));
 
         $stocksId = [];

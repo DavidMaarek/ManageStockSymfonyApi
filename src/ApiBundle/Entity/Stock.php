@@ -22,7 +22,7 @@ class Stock
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"home", "histories", "stock"})
+     * @Groups({"home", "histories", "stock", "profile"})
      */
     private $id;
 
@@ -30,7 +30,7 @@ class Stock
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
-     * @Groups({"home", "histories", "stock"})
+     * @Groups({"home", "histories", "stock", "profile"})
      * @Assert\NotBlank(message="Value not be blank")
      */
     private $name;

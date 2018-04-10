@@ -24,3 +24,6 @@ access:
 history:
     type:     rest
     resource: ApiBundle\Controller\HistoryController
+profile:
+    type:     rest
+    resource: ApiBundle\Controller\ProfileController
