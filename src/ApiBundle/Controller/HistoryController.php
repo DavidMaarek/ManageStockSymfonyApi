@@ -16,6 +16,40 @@ class HistoryController extends MainController
     /**
      * @param Request $request
      * @return mixed
+     * @Rest\View(serializerGroups={"histories"})
+     * @Rest\Get("/histories")
+     */
+    public function getHistoriesAction(Request $request)
+    {
+        $stocksId = $this->giveMeUserStocks($request);
+
+        if (empty($stocksId)) {
+            throw new NotFoundHttpException('Vous n\'avez aucun stock');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+        $histories = [];
+
+        foreach ($stocksId as $stockId){
+            $products = $em->getRepository('ApiBundle:Product')->findByStock($stockId);
+
+            foreach ($products as $product) {
+                $histories[$stockId->getId()][] = $product->getHistory();
+            }
+
+        }
+
+        if (empty($histories) || empty($products)) {
+            throw new NotFoundHttpException('Aucun produit n\'a fait l\'objet d\'un retrait ou d\'un réapprovisionnement');
+        }
+
+        return $histories;
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
      * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"history"})
      * @Rest\Post("/histories/{type}")
      */
