@@ -15,28 +15,6 @@ class UserController extends MainController
     /**
      * @param Request $request
      * @return mixed
-     * @Rest\View(serializerGroups={"user"})
-     * @Rest\Get("/users/{id}")
-     */
-    public function getUserAction(Request $request)
-    {
-        if($this->isThisUser($request)){
-            $em = $this->getDoctrine()->getManager();
-            $user = $em->getRepository('ApiBundle:User')->find($request->get('id'));
-
-            if (empty($user)) {
-                throw new NotFoundHttpException('User not found');
-            }
-
-            return $user;
-        } else {
-            throw new BadCredentialsException('Vous n\'avez les droits pour afficher cet utilisateur');
-        }
-    }
-
-    /**
-     * @param Request $request
-     * @return mixed
      * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"user"})
      * @Rest\Post("/users")
      */
