@@ -15,27 +15,6 @@ class StockController extends MainController
     /**
      * @param Request $request
      * @return mixed
-     * @Rest\View(serializerGroups={"home"})
-     * @Rest\Get("/home")
-    */
-    public function getStocksAction(Request $request)
-    {
-        $stocksId = $this->giveMeUsersStocks($request);
-
-        if (empty($stocksId)) {
-            throw new NotFoundHttpException('Vous n\'avez aucun stock');
-        }
-
-        $em = $this->getDoctrine()->getManager();
-
-        $stocks = $em->getRepository('ApiBundle:Stock')->findById($stocksId);
-
-        return $stocks;
-    }
-
-    /**
-     * @param Request $request
-     * @return mixed
      * @Rest\View(serializerGroups={"stock"})
      * @Rest\Get("/stocks/{id}")
      */

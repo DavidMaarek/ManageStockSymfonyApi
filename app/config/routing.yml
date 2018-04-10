@@ -3,6 +3,9 @@ api:
     type:     annotation
     prefix:   /
 
+home:
+    type:     rest
+    resource: ApiBundle\Controller\HomeController
 products:
     type:     rest
     resource: ApiBundle\Controller\ProductController
