@@ -43,7 +43,7 @@ class UserController extends MainController
     /**
      * @param Request $request
      * @return mixed
-     * @Rest\View()
+     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
      * @Rest\Put("/users/{id}")
      */
     public function updateUserAction(Request $request)
@@ -54,7 +54,7 @@ class UserController extends MainController
     /**
      * @param Request $request
      * @return mixed
-     * @Rest\View()
+     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
      * @Rest\Patch("/users/{id}")
      */
     public function patchUserAction(Request $request)
@@ -82,7 +82,6 @@ class UserController extends MainController
 
                 $em->persist($user);
                 $em->flush();
-                return $user;
             } else {
                 return $form;
             }
