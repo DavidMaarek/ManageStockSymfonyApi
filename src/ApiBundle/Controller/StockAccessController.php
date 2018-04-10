@@ -40,6 +40,8 @@ class StockAccessController extends MainController
      */
     public function postStockAccessAction(Request $request)
     {
+        // TODO Verifier si l'utilisateur auquel on veut ajouter des droits n'en ai pas deja sur ce stock
+
         $stockId = $request->get('stock');
 
         if($this->isSuperAdmin($request, $stockId)){
@@ -65,7 +67,8 @@ class StockAccessController extends MainController
     /**
      * @param Request $request
      * @return mixed
-     * @Rest\Put("/accesses/stocks/{stock_id}/users/{user_id}")
+     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
+     * @Rest\Put("/accesses/{id}")
      */
     public function updateStockAccessAction(Request $request)
     {
@@ -75,7 +78,8 @@ class StockAccessController extends MainController
     /**
      * @param Request $request
      * @return mixed
-     * @Rest\Patch("/accesses/stocks/{stock_id}/users/{user_id}")
+     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
+     * @Rest\Patch("/accesses/{id}")
      */
     public function patchStockAccessAction(Request $request)
     {
@@ -84,27 +88,23 @@ class StockAccessController extends MainController
 
     private function updateStockAccess(Request $request, $clearMissing)
     {
-        $stockId = $request->get('stock_id');
-        $userId = $request->get('user_id');
+        $em = $this->getDoctrine()->getManager();
+
+        $stockAccess = $em->getRepository('ApiBundle:StockAccess')->findOneById($request->get('id'));
+
+        if (empty($stockAccess)) {
+            throw new NotFoundHttpException('Cet access n\'existe pas');
+        }
+
+        $stockId = $stockAccess->getStock();
 
         if($this->isSuperAdmin($request, $stockId)){
-            $stockAccess = $this->get('doctrine.orm.entity_manager')
-                ->getRepository('ApiBundle:StockAccess')
-                ->findOneBy(array(
-                    "user" => $userId,
-                    "stock" => $stockId
-                ));
-
-            if (empty($stockAccess)) {
-                throw new NotFoundHttpException('Cet access n\'existe pas');
-            }
-
             $form = $this->createForm(AccessType::class, $stockAccess);
 
             $form->submit($request->request->all(), $clearMissing);
 
             if ($form->isValid()) {
-                $em = $this->get('doctrine.orm.entity_manager');
+                $em = $this->getDoctrine()->getManager();
 
                 $em->persist($stockAccess);
                 $em->flush();
