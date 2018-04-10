@@ -89,7 +89,7 @@ class StockController extends MainController
     /**
      * @param Request $request
      * @return mixed
-     * @Rest\View(serializerGroups={"stock"})
+     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
      * @Rest\Put("/stocks/{id}")
      */
     public function updateStockAction(Request $request)
@@ -100,7 +100,7 @@ class StockController extends MainController
     /**
      * @param Request $request
      * @return mixed
-     * @Rest\View(serializerGroups={"stock"})
+     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
      * @Rest\Patch("/stocks/{id}")
      */
     public function patchStockAction(Request $request)
@@ -113,7 +113,7 @@ class StockController extends MainController
         $stockId = $request->get('id');
 
         if($this->isSuperAdmin($request, $stockId)){
-            $stock = $this->get('doctrine.orm.entity_manager')
+            $stock = $this->getDoctrine()->getManager()
                 ->getRepository('ApiBundle:Stock')
                 ->find($request->get('id'));
 
@@ -130,7 +130,6 @@ class StockController extends MainController
 
                 $em->persist($stock);
                 $em->flush();
-                return $stock;
             } else {
                 return $form;
             }
