@@ -14,7 +14,7 @@ class ProfileController extends MainController
      * @Rest\View(serializerGroups={"profile"})
      * @Rest\Get("/profile")
      */
-    public function getStocksAction(Request $request)
+    public function getProfileAction(Request $request)
     {
 
         // Recupere les informations du user du token

@@ -35,10 +35,7 @@ class UserController extends MainController
 
             $em->persist($user);
             $em->flush();
-
-            return $user;
         } else {
-
             return $form;
         }
     }

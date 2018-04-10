@@ -3,9 +3,6 @@ api:
     type:     annotation
     prefix:   /
 
-home:
-    type:     rest
-    resource: ApiBundle\Controller\HomeController
 products:
     type:     rest
     resource: ApiBundle\Controller\ProductController
@@ -24,6 +21,9 @@ access:
 history:
     type:     rest
     resource: ApiBundle\Controller\HistoryController
+home:
+    type:     rest
+    resource: ApiBundle\Controller\HomeController
 profile:
     type:     rest
     resource: ApiBundle\Controller\ProfileController
