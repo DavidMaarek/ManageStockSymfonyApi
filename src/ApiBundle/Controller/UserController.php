@@ -44,7 +44,7 @@ class UserController extends MainController
      * @param Request $request
      * @return mixed
      * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
-     * @Rest\Put("/users/{id}")
+     * @Rest\Put("/users")
      */
     public function updateUserAction(Request $request)
     {
@@ -55,7 +55,7 @@ class UserController extends MainController
      * @param Request $request
      * @return mixed
      * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
-     * @Rest\Patch("/users/{id}")
+     * @Rest\Patch("/users")
      */
     public function patchUserAction(Request $request)
     {
@@ -64,29 +64,23 @@ class UserController extends MainController
 
     private function updateUser(Request $request, $clearMissing)
     {
-        if($this->isThisUser($request)){
-            $user = $this->get('doctrine.orm.entity_manager')
-                ->getRepository('ApiBundle:User')
-                ->find($request->get('id'));
+        $userId = $this->giveMeUserId($request);
 
-            if (empty($user)) {
-                throw new NotFoundHttpException('Cet utilisateur n\'existe pas');
-            }
+        $user = $this->getDoctrine()->getManager()
+            ->getRepository('ApiBundle:User')
+            ->find($userId);
 
-            $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserType::class, $user);
 
-            $form->submit($request->request->all(), $clearMissing);
+        $form->submit($request->request->all(), $clearMissing);
 
-            if ($form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
 
-                $em->persist($user);
-                $em->flush();
-            } else {
-                return $form;
-            }
+            $em->persist($user);
+            $em->flush();
         } else {
-            throw new BadCredentialsException('Vous n\'avez les droits pour modifier cet utilisateur');
+            return $form;
         }
     }
 }

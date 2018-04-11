@@ -52,6 +52,8 @@ class AuthTokenController extends Controller
 
         $em->persist($authToken);
         $em->flush();
+
+        return $authToken;
     }
 
     private function invalidCredentials()
