@@ -74,8 +74,6 @@ class ProductController extends MainController
 
                 $em->persist($product);
                 $em->flush();
-
-                return $product;
             } else {
 
                 return $form;
