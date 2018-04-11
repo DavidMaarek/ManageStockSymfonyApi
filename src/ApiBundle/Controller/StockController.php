@@ -132,7 +132,7 @@ class StockController extends MainController
                 return $form;
             }
         } else {
-            throw new BadCredentialsException('Vous n\'avez les droits sur ce stock pour le modifier');
+            throw new BadCredentialsException('Vous n\'avez pas les droits sur ce stock pour le modifier');
         }
     }
 
