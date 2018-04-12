@@ -152,7 +152,7 @@ class ProductController extends MainController
             if ($form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
 
-                /*$picture1 = $this->container->get('app.file_uploader')->upload($product->getPicture1());
+                $picture1 = $this->container->get('app.file_uploader')->upload($product->getPicture1());
                 $product->setPicture1($picture1);
 
                 $picture2 = $this->container->get('app.file_uploader')->upload($product->getPicture2());
@@ -165,7 +165,7 @@ class ProductController extends MainController
                 $product->setPicture4($picture4);
 
                 $picture5 = $this->container->get('app.file_uploader')->upload($product->getPicture5());
-                $product->setPicture5($picture5);*/
+                $product->setPicture5($picture5);
 
                 $em->persist($product);
                 $em->flush();
