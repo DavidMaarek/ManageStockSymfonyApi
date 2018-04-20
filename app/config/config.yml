@@ -85,3 +85,12 @@ fos_rest:
             'Symfony\Component\Security\Core\Exception\BadCredentialsException': true
         codes:
             'Symfony\Component\Security\Core\Exception\BadCredentialsException': 401
+
+nelmio_cors:
+    paths:
+        '^/':
+            allow_credentials: true
+            allow_origin: ['*']
+            allow_headers: ['*']
+            allow_methods: ['POST', 'PUT', 'PATCH', 'GET', 'DELETE']
+            max_age: 3600
