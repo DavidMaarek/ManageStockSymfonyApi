@@ -4,14 +4,15 @@ namespace ApiBundle\Controller;
 use ApiBundle\Entity\AuthToken;
 use ApiBundle\Entity\Credentials;
 use ApiBundle\Form\CredentialsType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use ApiBundle\Security\AuthTokenAuthenticator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
-class AuthTokenController extends Controller
+class AuthTokenController extends AuthTokenAuthenticator
 {
     /**
      * @param Request $request
@@ -64,6 +65,16 @@ class AuthTokenController extends Controller
     /**
      * @param Request $request
      * @return mixed
+     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT, serializerGroups={"auth-token"})
+     * @Rest\Get("/valid-auth-tokens")
+     */
+    public function getIsValidAuthTokenAction(Request $request)
+    {
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
      * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
      * @Rest\Delete("/auth-tokens/{id}")
      */
@@ -81,4 +92,6 @@ class AuthTokenController extends Controller
             throw new BadRequestHttpException();
         }
     }
+
+
 }

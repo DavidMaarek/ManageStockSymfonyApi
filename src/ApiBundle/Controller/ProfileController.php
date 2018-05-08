@@ -21,12 +21,12 @@ class ProfileController extends MainController
         // Recupere les informations du user du token
         $userId = $this->giveMeUserId($request);
         $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('ApiBundle:User')->findById($userId);
+        $user = $em->getRepository('ApiBundle:User')->findOneById($userId);
 
 
         // Recuperer les stocks dont il est super admin
         $stocksId = $this->giveMeUserStocksSuperAdmin($request);
-        $stocks = $em->getRepository('ApiBundle:Stock')->findById($stocksId);
+        $stocks = $em->getRepository('ApiBundle:Stock')->findOneById($stocksId);
 
         return [
             "user" => $user,

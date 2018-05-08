@@ -1,6 +1,7 @@
 <?php
 namespace ApiBundle\Security;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -10,12 +11,13 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\SimplePreAuthenticatorInterface;
 
-class AuthTokenAuthenticator implements SimplePreAuthenticatorInterface, AuthenticationFailureHandlerInterface
+class AuthTokenAuthenticator extends Controller implements SimplePreAuthenticatorInterface, AuthenticationFailureHandlerInterface
 {
     /**
-     * Durée de validité du token en secondes, 12 heures
+     * Durée de validité du token en secondes, 1 an (31556952 secondes)
      */
-    const TOKEN_VALIDITY_DURATION = 31536000;
+    const TOKEN_VALIDITY_DURATION = 31556952;
+    //const TOKEN_VALIDITY_DURATION = 10;
 
 
     public function createToken(Request $request, $providerKey)
