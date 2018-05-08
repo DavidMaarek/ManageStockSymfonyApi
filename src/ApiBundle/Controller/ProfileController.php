@@ -26,7 +26,7 @@ class ProfileController extends MainController
 
         // Recuperer les stocks dont il est super admin
         $stocksId = $this->giveMeUserStocksSuperAdmin($request);
-        $stocks = $em->getRepository('ApiBundle:Stock')->findOneById($stocksId);
+        $stocks = $em->getRepository('ApiBundle:Stock')->findById($stocksId);
 
         return [
             "user" => $user,
