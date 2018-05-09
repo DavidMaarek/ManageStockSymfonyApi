@@ -55,6 +55,8 @@ class StockController extends MainController
 
             $em->persist($stock);
             $em->flush();
+
+            return $stock->getId();
         } else {
             return $form;
         }
