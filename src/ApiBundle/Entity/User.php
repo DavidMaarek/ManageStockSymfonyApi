@@ -21,7 +21,7 @@ class User implements UserInterface
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"histories", "stock", "product", "profile", "profileStock", "access"})
+     * @Groups({"user", "histories", "stock", "product", "profile", "profileStock", "access"})
      */
     private $id;
 
@@ -29,7 +29,7 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
-     * @Groups({"histories", "stock", "product", "profile", "profileStock", "access"})
+     * @Groups({"user", "histories", "stock", "product", "profile", "profileStock", "access"})
      * @Assert\NotBlank(message="Vous devez renseigner un nom")
      */
     private $name;
@@ -38,7 +38,7 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="firstname", type="string", length=255)
-     * @Groups({"histories", "stock", "product", "profile", "profileStock", "access"})
+     * @Groups({"user", "histories", "stock", "product", "profile", "profileStock", "access"})
      * @Assert\NotBlank(message="Vous devez renseigner un prénom")
      */
     private $firstname;
@@ -55,7 +55,7 @@ class User implements UserInterface
 
     /**
      * @var string
-     * @Groups({"profile"})
+     * @Groups({"user", "profile"})
      * @ORM\Column(name="society", type="string", length=255, nullable=true)
 
      */

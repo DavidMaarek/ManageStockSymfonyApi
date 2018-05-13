@@ -124,6 +124,8 @@ class StockAccessController extends MainController
      */
     public function removeStockAccessAction(Request $request)
     {
+        // TODO Check si l'utilisateur à supprimer n'est pas le dernier avec les droits admins
+
         $em = $this->getDoctrine()->getManager();
 
         $stockAccess = $em->getRepository('ApiBundle:StockAccess')->findOneById($request->get('id'));
