@@ -21,7 +21,7 @@ class User implements UserInterface
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"user", "histories", "stock", "product", "profile", "profileStock", "access"})
+     * @Groups({"user", "histories", "stock", "product", "profile", "profileStock", "access", "home"})
      */
     private $id;
 

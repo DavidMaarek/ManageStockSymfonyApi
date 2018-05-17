@@ -144,13 +144,12 @@ class Product
     /**
      * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\Stock", inversedBy="products")
      * @ORM\JoinColumn(name="stock_id", referencedColumnName="id")
-     * @Groups({"histories"})
      */
     private $stock;
 
     /**
      * @ORM\OneToMany(targetEntity="ApiBundle\Entity\History", mappedBy="product", cascade={"remove"})
-     * @Groups({"product"})
+     * @Groups({"product", "histories"})
      */
     private $history;
 

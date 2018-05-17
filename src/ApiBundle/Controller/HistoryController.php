@@ -21,7 +21,7 @@ class HistoryController extends MainController
      */
     public function getHistoriesAction(Request $request)
     {
-        $stocksId = $this->giveMeUserStocks($request);
+        /*$stocksId = $this->giveMeUserStocks($request);
 
         if (empty($stocksId)) {
             throw new NotFoundHttpException('Vous n\'avez aucun stock');
@@ -44,7 +44,19 @@ class HistoryController extends MainController
             throw new NotFoundHttpException('Aucun produit n\'a fait l\'objet d\'un retrait ou d\'un réapprovisionnement');
         }
 
-        return $histories;
+        return $histories;*/
+
+        $stocksId = $this->giveMeUserStocks($request);
+
+        if (empty($stocksId)) {
+            throw new NotFoundHttpException('Vous n\'avez aucun stock');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+        $stocks = $em->getRepository('ApiBundle:Stock')->findById($stocksId);
+
+        return $stocks;
     }
 
     /**
@@ -58,7 +70,7 @@ class HistoryController extends MainController
         $productId = $request->get('product');
         $stockId = $this->giveMeStockIdByProductId($productId);
 
-        if($this->historyCheckSameUser($request) && $this->isUser($request, $stockId) && ($request->get('type') == 'add' || $request->get('type') == 'remove')){
+        if($this->isUser($request, $stockId) && ($request->get('type') == 'add' || $request->get('type') == 'remove')){
             $history = new History();
 
             $form = $this->createForm(HistoryType::class, $history);
@@ -71,12 +83,14 @@ class HistoryController extends MainController
                 $type = $request->get('type');
                 $history->setType($type);
 
+                $userId = $this->giveMeUserId($request);
+                $user = $em->getRepository('ApiBundle:User')->findOneById($userId);
+                $history->setUser($user);
+
                 $em->persist($history);
                 $em->flush();
 
                 $this->historyUpdateProduct($productId, $request->get('quantity'), $type);
-
-                return $history;
             } else {
                 return $form;
             }
