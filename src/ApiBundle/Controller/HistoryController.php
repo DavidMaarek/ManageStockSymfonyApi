@@ -54,9 +54,17 @@ class HistoryController extends MainController
 
         $em = $this->getDoctrine()->getManager();
 
-        $stocks = $em->getRepository('ApiBundle:Stock')->findById($stocksId);
+        $stocksName = $em->getRepository('ApiBundle:Stock')->findById($stocksId);
 
-        return $stocks;
+        $stocks = [];
+        foreach($stocksId as $stock) {
+            $stocks[$stock->getId()] = $em->getRepository('ApiBundle:History')->findAllByStock($stock);
+        }
+
+        return [
+            "histories" => $stocks,
+            "stocksName" => $stocksName
+        ];
     }
 
     /**

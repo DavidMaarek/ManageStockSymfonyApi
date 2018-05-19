@@ -52,6 +52,7 @@ class History
     /**
      * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\Product", inversedBy="history")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
+     * @Groups({"histories"})
      */
     private $product;
 

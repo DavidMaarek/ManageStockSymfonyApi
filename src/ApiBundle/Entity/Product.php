@@ -149,7 +149,7 @@ class Product
 
     /**
      * @ORM\OneToMany(targetEntity="ApiBundle\Entity\History", mappedBy="product", cascade={"remove"})
-     * @Groups({"product", "histories"})
+     * @Groups({"product"})
      */
     private $history;
 

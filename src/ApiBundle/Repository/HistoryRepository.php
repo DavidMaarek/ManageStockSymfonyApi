@@ -2,6 +2,9 @@
 
 namespace ApiBundle\Repository;
 
+use ApiBundle\Entity\History;
+use Symfony\Bridge\Doctrine\RegistryInterface;
+
 /**
  * HistoryRepository
  *
@@ -10,4 +13,18 @@ namespace ApiBundle\Repository;
  */
 class HistoryRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function findAllByStock($stock)
+    {
+        $qb = $this->createQueryBuilder('h')
+            ->select('h, p, s')
+            ->innerJoin('h.product', 'p')
+            ->innerJoin('p.stock', 's')
+            ->andWhere('p.stock = :stock')
+            ->setParameter('stock', $stock)
+            ->orderBy('h.date', 'DESC')
+            ->getQuery();
+
+        return $qb->execute();
+    }
 }
