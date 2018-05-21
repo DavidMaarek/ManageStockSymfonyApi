@@ -39,7 +39,6 @@ class Product
      *
      * @ORM\Column(name="reference", type="string", length=255)
      * @Groups({"product"})
-     * @Assert\NotBlank()
      */
     private $reference;
 
