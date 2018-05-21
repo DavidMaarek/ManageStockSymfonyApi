@@ -3,6 +3,7 @@
 namespace ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -12,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="ApiBundle\Repository\UserRepository")
+ * @UniqueEntity("email", message="Un compte existe deja avec cette adresse email")
  */
 class User implements UserInterface
 {
