@@ -1,4 +1,5 @@
-api
+Manage Stock
 ===
 
-A Symfony project created on February 11, 2018, 7:18 pm.
+Projet de fin d'étude, master 2. Application de gestion de stock.
+Ce repository est celui de l'API de l'application.
